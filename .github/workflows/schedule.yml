@@ -1,0 +1,75 @@
+name: Schedule Publisher
+
+on:
+  schedule:
+    # Run every hour at minute 0
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Report what would publish without changing anything'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Shares a group with "Publish to dev.to" so the two never push to main at once.
+concurrency:
+  group: devto-main-write
+  cancel-in-progress: false
+
+jobs:
+  check-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run scheduler script
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            python scripts/publish_scheduler.py --dry-run
+          else
+            python scripts/publish_scheduler.py
+          fi
+
+      - name: Commit and push if changed
+        if: inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Top-level articles only, matching what publish.yml syncs.
+          git add -- ':(glob)articles/*.md'
+          if git diff --cached --quiet; then
+            echo "No articles published."
+            exit 0
+          fi
+
+          # Deliberately no [skip ci]: this commit is what triggers publish.yml.
+          git commit -m "chore: auto-publish scheduled articles"
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing onto origin/${GITHUB_REF_NAME}."
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            sleep $((attempt * 5))
+          done
+          echo "::error::Could not push the scheduled-publish commit after 3 attempts."
+          exit 1
