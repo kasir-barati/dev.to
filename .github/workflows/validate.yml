@@ -48,16 +48,12 @@ jobs:
             git fetch --no-tags origin "$BASE_REF"
             base="$(git rev-parse FETCH_HEAD)"
           elif [ -n "${BEFORE:-}" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
-              && git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+               && git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
             base="$BEFORE"
           else
             base="$(git rev-parse HEAD^ 2>/dev/null || git rev-parse HEAD)"
           fi
-          # Ensure base is not empty before writing to output
-          if [ -z "$base" ]; then
-            base="$(git rev-parse HEAD)"
-          fi
-          printf "ref=%s\n" "$base" >> "$GITHUB_OUTPUT"
+          echo "ref=$base" >> "$GITHUB_OUTPUT"
           echo "Comparing against $base"
 
       - name: Collect changed articles
