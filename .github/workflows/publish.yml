@@ -16,15 +16,13 @@ on:
           - all
         default: changed
 
-# Both this workflow and Schedule Publisher commit to main. Sharing one
-# concurrency group keeps their pushes from racing into a non-fast-forward.
+# Both this workflow and Schedule Publisher commit to main. Sharing one concurrency group keeps their pushes from racing into a non-fast-forward.
 concurrency:
   group: devto-main-write
   cancel-in-progress: false
 
 env:
-  # Pinned: an unpinned global install would silently pick up whatever the
-  # registry serves at build time.
+  # Pinned: an unpinned global install would silently pick up whatever the registry serves at build time.
   DEVTO_CLI_VERSION: '1.4.0'
   ARTICLE_LIST: articles.nul
 
@@ -92,9 +90,7 @@ jobs:
       - name: Publish articles
         if: steps.collect.outputs.count != '0'
         env:
-          # devto-cli reads DEVTO_TOKEN from the environment. Passing the key as
-          # an argv flag would expose it to anything that can read /proc on the
-          # runner; the env var does not appear in the process table.
+          # devto-cli reads DEVTO_TOKEN from the environment. Passing the key as an argv flag would expose it to anything that can read /proc on the runner; the env var does not appear in the process table.
           DEVTO_TOKEN: ${{ secrets.DEVTO_API_KEY }}
         run: |
           set -euo pipefail
@@ -104,10 +100,7 @@ jobs:
           fi
           mapfile -d '' -t files < "${RUNNER_TEMP}/${ARTICLE_LIST}"
 
-          # One invocation for the whole batch. devto-cli fetches the full remote
-          # article list once per run, throttles writes internally (30 updates /
-          # 30s, 10 creates / 30s) and retries 429s, so per-file loops with
-          # sleeps only multiply the remote fetches.
+          # One invocation for the whole batch. devto-cli fetches the full remote article list once per run, throttles writes internally (30 updates/30s, 10 creates/30s) and retries 429s, so per-file loops with sleeps only multiply the remote fetches.
           dev push "${files[@]}" -r "${GITHUB_REPOSITORY}" -b "${GITHUB_REF_NAME}" --verbose
 
       - name: Commit and push metadata written back by devto-cli

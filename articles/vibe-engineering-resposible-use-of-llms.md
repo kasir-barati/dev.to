@@ -24,6 +24,10 @@ And I wholeheartedly agree with him. It's about being **highly productive**, **h
 
 > If you're going to really exploit the capabilities of these new tools, you need to be operating at the top of your game. You're not just responsible for writing the code—you're researching approaches, deciding on high-level architecture, writing specifications, defining success criteria, [designing agentic loops](https://simonwillison.net/2025/Sep/30/designing-agentic-loops/), planning QA, managing a growing army of weird digital interns who will absolutely cheat if you give them a chance, and spending so much time on code review.
 
+You are responsible for what LLMs generate:
+
+[You are responsible for what LLMs generate](./assets/vibe-engineering-resposible-use-of-llms/claude-security-note.png)
+
 *Happy engineering.* 🚀
 
 ---

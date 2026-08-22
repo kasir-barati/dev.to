@@ -1,4 +1,4 @@
-# TIL
+# TIL -- Today I Learned
 
 Snippet-sized notes that aren't worth a full article. Files under `articles/TIL/**` are intentionally not published to dev.to: the workflow globs `articles/*.md` non-recursively (see `.github/workflows/publish.yml` and `scripts/publish_scheduler.py`).
 

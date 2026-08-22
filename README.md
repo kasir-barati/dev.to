@@ -37,7 +37,7 @@ Pushing to `main` triggers `.github/workflows/publish.yml`, which validates the 
 cp templates/article-template.md articles/<slug>.md
 ```
 
-The slug becomes part of the dev.to URL (dev.to appends a random suffix on first publish). Local-only drafts and Japanese versions live under `articles/DRAFT/` and `articles/JA/`, both gitignored, so nothing in those directories ever reaches dev.to.
+The slug becomes part of the dev.to URL (dev.to appends a random suffix on first publish). Local-only drafts and Japanese versions live under `articles/DRAFT/` and `articles/JA/` (of course if you are aiming to write posts in other languages and gitignore them until you are ready to publish them you can gitignore its dir), both gitignored, so nothing in those directories ever reaches dev.to.
 
 </td>
 <td width="50%" valign="top">
