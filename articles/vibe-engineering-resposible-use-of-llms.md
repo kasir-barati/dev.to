@@ -1,12 +1,14 @@
 ---
-title: "Vibe Engineering -- Responsible use of LLMs"
+title: Vibe Engineering -- Responsible use of LLMs
 published: true
-description: "From fast & loose to accountable & pro: how seasoned devs accelerate with LLMs without losing control."
+description: 'From fast & loose to accountable & pro: how seasoned devs accelerate with LLMs without losing control.'
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/vibe-engineering-resposible-use-of-llms/cover.png'
 tags:
   - ai
   - llm
   - productivity
+id: 4460673
+date: '2026-08-22T10:31:57Z'
 ---
 
 I sometimes hear about vibe coding and honestly I do NOT believe you as a professional developer need to do it. The journey of using LLMs is interesting, it's useful, you pick up new skills. BUT I wish devs would not stop there and go deeper, get more pro and know what LLM is doing/writing.
