@@ -4,7 +4,6 @@ published: true
 description: 'I really hate how the UI of DEV.to messed up with my post after I tried to edit it. That is why I decided to switch to a Gitops for blogging approach.'
 tags: ['blogging', 'gitops']
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/switched-to-vcs-instead-of-the-crappy-ui-of-dev.to/cover.png'
-date: '2026-08-21T21:35:48.514Z'
 ---
 
 ## How this Started?
