@@ -6,7 +6,6 @@ tags:
   - blogging
   - gitops
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/switched-to-vcs-instead-of-the-crappy-ui-of-dev.to/cover.png'
-id: 3892021
 date: '2026-08-21T21:35:48.514Z'
 ---
 
