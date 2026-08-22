@@ -1,6 +1,6 @@
 ---
 title: 'Switched to VCS Instead of the Crappy UI of DEV.to'
-published: false
+published: true
 description: 'I really hate how the UI of DEV.to messed up with my post after I tried to edit it. That is why I decided to switch to a Gitops for blogging approach.'
 tags:
   - blogging
