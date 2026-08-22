@@ -108,7 +108,7 @@ jobs:
           # article list once per run, throttles writes internally (30 updates /
           # 30s, 10 creates / 30s) and retries 429s, so per-file loops with
           # sleeps only multiply the remote fetches.
-          dev push "${files[@]}" -r "${GITHUB_REPOSITORY}" -b "${GITHUB_REF_NAME}"
+          dev push "${files[@]}" -r "${GITHUB_REPOSITORY}" -b "${GITHUB_REF_NAME}" --verbose
 
       - name: Commit and push metadata written back by devto-cli
         if: steps.collect.outputs.count != '0'
