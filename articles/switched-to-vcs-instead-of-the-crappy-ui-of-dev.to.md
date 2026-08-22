@@ -1,9 +1,13 @@
 ---
-title: 'Switched to VCS Instead of the Crappy UI of DEV.to'
+title: Switched to VCS Instead of the Crappy UI of DEV.to
 published: true
-description: 'I really hate how the UI of DEV.to messed up with my post after I tried to edit it. That is why I decided to switch to a Gitops for blogging approach.'
-tags: ['blogging', 'gitops']
+description: I really hate how the UI of DEV.to messed up with my post after I tried to edit it. That is why I decided to switch to a Gitops for blogging approach.
+tags:
+  - blogging
+  - gitops
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/switched-to-vcs-instead-of-the-crappy-ui-of-dev.to/cover.png'
+id: 4459793
+date: '2026-08-22T08:39:38Z'
 ---
 
 ## How this Started?
