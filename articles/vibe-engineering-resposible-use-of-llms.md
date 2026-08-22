@@ -9,6 +9,7 @@ tags:
   - productivity
 id: 4460673
 date: '2026-08-22T10:31:57Z'
+series: Agentic Programming
 ---
 
 I sometimes hear about vibe coding and honestly I do NOT believe you as a professional developer need to do it. The journey of using LLMs is interesting, it's useful, you pick up new skills. BUT I wish devs would not stop there and go deeper, get more pro and know what LLM is doing/writing.
@@ -24,6 +25,8 @@ And I wholeheartedly agree with him. It's about being **highly productive**, **h
 > If you're going to really exploit the capabilities of these new tools, you need to be operating at the top of your game. You're not just responsible for writing the code—you're researching approaches, deciding on high-level architecture, writing specifications, defining success criteria, [designing agentic loops](https://simonwillison.net/2025/Sep/30/designing-agentic-loops/), planning QA, managing a growing army of weird digital interns who will absolutely cheat if you give them a chance, and spending so much time on code review.
 
 *Happy engineering.* 🚀
+
+---
 
 ## The Evolution of AI Coding 🐒➡️🧍
 
