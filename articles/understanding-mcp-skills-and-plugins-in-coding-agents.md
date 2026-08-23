@@ -1,6 +1,6 @@
 ---
 title: 'Understanding MCP, Skills, and Plugins'
-published: false
+published: true
 description: 'Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents.'
 tags:
   - ai
