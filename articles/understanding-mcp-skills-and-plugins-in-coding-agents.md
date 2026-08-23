@@ -9,6 +9,7 @@ tags:
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png'
 series: Agentic Programming
 id: 4468753
+date: '2026-08-23T16:36:48Z'
 ---
 
 You might have heard of skills, plugins, and MCPs. But if you have not I guess if I had to put explain it in 10 seconds I would say:
