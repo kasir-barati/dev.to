@@ -16,7 +16,7 @@
 - `reviewer`'s `tools:` frontmatter must be exactly `Read, Grep, Glob` — no Write, Edit, NotebookEdit, or Bash, ever. This is the only mechanism that actually guarantees it cannot change anything (Bash could write files via redirection even if discouraged only in its prompt).
 - `self-improvement` is the only agent whose prompt authorizes editing `PROCESS.md` or `SELF_IMPROVEMENT.md`.
 - Any diff touching `.github/workflows/**` or `scripts/**` must go through the `reviewer` agent before it is committed to `main` — this plan's own Task 4/5 diff is not exempt (Task 6 dogfoods this).
-- `publish.yml`, `schedule.yml`, `validate.yml`, and `audit.yml` share the `devto-main-write` concurrency group — do not remove or fork that group.
+- `publish.yml` and `schedule.yml` share the `devto-main-write` concurrency group (both can push to `main`) — do not remove or fork that group. `audit.yml` (`devto-audit`) and `validate.yml` (`validate-${{ github.ref }}`) each have their own separate group.
 - `DEVTO_API_KEY` is passed to devto-cli only via the `DEVTO_TOKEN` env var, never a CLI flag — preserve this in any step that's touched.
 - No test framework is being introduced. This repo has none (`scripts/*.py` has zero test files); new script logic is verified by direct invocation with real assertions, matching the codebase's existing convention.
 - `validate_articles.py` already strips query strings before checking image existence (`url.split("?")[0]` at both the cover-image and inline-image checks) — confirmed by reading `scripts/validate_articles.py:150,166`. The new `?v=` suffix will not trip validation; no change to `validate_articles.py` is needed.
@@ -93,10 +93,11 @@ actually behaves today (including known gaps), `AGENTS.md` has the repo's
 content/validation rules your scripts must enforce.
 
 Constraints:
-- `publish.yml`, `schedule.yml`, `validate.yml`, and `audit.yml` share the
-  `devto-main-write` concurrency group because all but `validate.yml` can
-  push to `main` — don't remove that without understanding why (races
-  between them).
+- `publish.yml` and `schedule.yml` share the `devto-main-write` concurrency
+  group because both can push to `main` — don't remove that without
+  understanding why (races between them). `audit.yml` has its own separate
+  `devto-audit` group and `validate.yml` its own `validate-${{ github.ref }}`
+  group — neither shares `devto-main-write`.
 - `DEVTO_API_KEY` is passed to devto-cli as the `DEVTO_TOKEN` env var,
   never a CLI flag (keeps it out of the runner's process table) — preserve
   that pattern in any step you touch.
@@ -249,10 +250,12 @@ change to `.github/workflows/**` or `scripts/**`.
 
 ## Current CI pipeline
 
-Four workflows in `.github/workflows/`. `publish.yml`, `schedule.yml`, and
-`audit.yml` share the `devto-main-write` concurrency group with each other
-since all three can push to `main` — `validate.yml` never pushes, so it's
-not in that group.
+Four workflows in `.github/workflows/`. `publish.yml` and `schedule.yml`
+share the `devto-main-write` concurrency group with each other since both
+can push to `main`. `audit.yml` also pushes to `main` (its weekly index
+refresh) but has its own separate `devto-audit` group — it is not
+serialized against `publish.yml`/`schedule.yml`. `validate.yml` has its
+own `validate-${{ github.ref }}` group and never pushes.
 
 - **`validate.yml`** — gates PRs and pushes. Diffs against a resolved base
   revision, then runs `validate_articles.py`, `lint_ratchet.py` (fails
