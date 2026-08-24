@@ -1,13 +1,15 @@
 ---
 title: Subagenting
 published: true
-description: 'How to use multiple agents to develop software.'
+description: How to use multiple agents to develop software.
 tags:
   - llm
   - programming
   - productivity
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/subagenting/cover.png'
 series: Agentic Programming
+id: 4474780
+date: '2026-08-24T11:02:15Z'
 ---
 
 I guess what I wanna talk about is what you can do as a user. Just imagine:
