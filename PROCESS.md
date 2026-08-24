@@ -68,6 +68,19 @@ This is fully automated — the article author never writes a `?v=` token by
 hand. It's the same spirit as the existing relative→absolute image URL
 rewrite: you write `./assets/<slug>/foo.png`, tooling handles the rest.
 
+**Known risk to watch, not yet confirmed:** dev.to may re-host or normalize
+`cover_image` URLs on ingest. If devto-cli's equality check (see the
+investigation above) ever compares against a dev.to-normalized
+`cover_image` rather than the literal string in this repo's frontmatter, a
+`?v=` suffix on a cover image could fail to converge and cause the article
+to look "changed" (and get re-pushed) on every single run, forever. Body
+images don't share this risk — dev.to stores `body_markdown` verbatim, so
+those `?v=` bumps are compared byte-for-byte. Watch the first real
+cover-image asset change in production for a repeat-push pattern in
+`publish.yml`'s "Publish articles" step logs; if it happens, the fix is
+likely to stop cache-busting `cover_image` specifically (inline image
+cache-busting is unaffected either way).
+
 ## Agent handoff protocol
 
 The orchestrator is the main Claude Code session a human is driving.
