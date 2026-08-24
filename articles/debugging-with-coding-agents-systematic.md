@@ -1,13 +1,15 @@
 ---
-title: 'Debugging with Coding Agents -- A Systematic Strategy That Actually Works'
+title: Debugging with Coding Agents -- A Systematic Strategy That Actually Works
 published: true
 description: 'A step-by-step approach to AI‑assisted debugging: from quick wins to disciplined investigation, and knowing when to switch models.'
-tags: 
+tags:
   - ai
   - debugging
   - claude
   - productivity
-cover_image: https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/debugging-with-coding-agents-systematic/cover.png
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/debugging-with-coding-agents-systematic/cover.png'
+id: 4471195
+date: '2026-08-24T03:51:32Z'
 ---
 
 If you've spent any time with any **coding agent** (Claude, Codex, OpenCode, etc), you know the feeling: you're cruising along, it makes a fix, and then suddenly you're in **tangent city**. The model goes off the rails, rewrites half your codebase, and you're left wondering what happened 🥲.
