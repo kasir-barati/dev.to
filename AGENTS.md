@@ -46,6 +46,19 @@ Run a single script directly for narrower checks, e.g. `python scripts/validate_
 
 `DEVTO_API_KEY` repo secret is required for publishing; passed to devto-cli as the `DEVTO_TOKEN` env var (never a CLI flag, to keep it out of the runner's process table).
 
+## Process
+
+`PROCESS.md` documents the CI pipeline in detail and defines the agent
+handoff protocol for Claude Code work in this repo. Two gates in it are
+mandatory, not optional:
+
+- Any diff touching `.github/workflows/**` or `scripts/**` must go through
+  the read-only `reviewer` agent (`.claude/agents/reviewer.md`) before it's
+  committed.
+- The `self-improvement` agent (`.claude/agents/self-improvement.md`) must
+  run as the last step of any task that went through this protocol, before
+  the task is considered done.
+
 ## Validation Rules (`scripts/validate_articles.py`)
 
 Blocks on: more than 4 tags, non-lowercase tags, a relative or missing `cover_image`, a missing referenced image, an SVG reference, an `<img>` with a relative `src`, a duplicate dev.to `id` across articles.

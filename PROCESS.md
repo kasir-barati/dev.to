@@ -72,14 +72,19 @@ rewrite: you write `./assets/<slug>/foo.png`, tooling handles the rest.
 `cover_image` URLs on ingest. If devto-cli's equality check (see the
 investigation above) ever compares against a dev.to-normalized
 `cover_image` rather than the literal string in this repo's frontmatter, a
-`?v=` suffix on a cover image could fail to converge and cause the article
-to look "changed" (and get re-pushed) on every single run, forever. Body
-images don't share this risk — dev.to stores `body_markdown` verbatim, so
-those `?v=` bumps are compared byte-for-byte. Watch the first real
-cover-image asset change in production for a repeat-push pattern in
-`publish.yml`'s "Publish articles" step logs; if it happens, the fix is
-likely to stop cache-busting `cover_image` specifically (inline image
-cache-busting is unaffected either way).
+`?v=` suffix on a cover image could fail to converge and keep looking
+"changed" to devto-cli. In practice this is bounded, not an unbounded
+loop: the commit-back step that would carry a non-converging bump uses
+`[skip ci]`, so it cannot self-retrigger `publish.yml`. The worst case is
+one redundant push the next time something else (a real content edit, or
+`schedule.yml` flipping `published: true`) triggers `publish.yml` for that
+article — not a repeat-push-forever pattern. Body images don't share this
+risk at all — dev.to stores `body_markdown` verbatim, so those `?v=` bumps
+are compared byte-for-byte. Watch for a redundant re-push of a
+cover-image-bumped article on its next unrelated trigger in `publish.yml`'s
+"Publish articles" step logs; if it happens, the fix is likely to stop
+cache-busting `cover_image` specifically (inline image cache-busting is
+unaffected either way).
 
 ## Agent handoff protocol
 
@@ -96,7 +101,10 @@ orchestrator.
    of which agent produced it — **must** go to `reviewer` before it is
    committed. Content-only changes to `articles/**/*.md` skip this gate.
    `reviewer` cannot edit anything (`Read, Grep, Glob` only, by design) —
-   it reports findings, the orchestrator or `ci-ops` acts on them.
+   it reports findings, the orchestrator or `ci-ops` acts on them. Since
+   `reviewer` has no Bash, the orchestrator materializes the diff to a
+   file (e.g. `git diff <base>..<head> > <path>`) and gives `reviewer` the
+   file path to Read — `reviewer` cannot run `git diff` itself.
 5. Reviewer findings loop back to `ci-ops` (or the orchestrator) for
    fixes. Re-review after a fix is orchestrator judgment, same as any
    code review loop — not automatically re-triggered.
@@ -116,3 +124,11 @@ orchestrator.
    narrowly and call out anywhere the task depends on the restriction
    actually holding. A fresh session picks up the new agent file normally;
    this workaround is only needed within the session that authored it.
+8. Any factual claim about workflow or script behavior — concurrency
+   groups, trigger paths, secret handling, which files an agent owns —
+   must be checked directly against the real file it describes, not
+   copied from another doc. `self-improvement`'s mandatory close-out
+   includes sweeping root-level docs (`AGENTS.md`, `README.md`,
+   `PROCESS.md`, `SELF_IMPROVEMENT.md`, `INDEX.md`) for the same claim
+   stated inconsistently across files, since per-task review scope
+   structurally cannot see cross-file consistency.

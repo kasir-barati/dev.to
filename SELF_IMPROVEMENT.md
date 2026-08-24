@@ -119,3 +119,14 @@ needed there.
 own-instructions change) captured everything needed for this entry without
 friction; no gap in the retro process itself surfaced.
 
+**Follow-up (same date, final-review fix wave):** the durable gap named
+above (nothing forced a fact-check against real files, nothing swept root
+docs for cross-file drift) has now been encoded into `PROCESS.md` — see
+its process-rules section. This entry's original claim that "no durable
+gap surfaced" beyond the dispatch-by-name limitation was incomplete; this
+one was already present in the entry's own Weaknesses section but wasn't
+acted on. (Also: the entry above says the `PROCESS.md` addition was "a
+fourth bullet"; the "Agent handoff protocol" section is a numbered list,
+not bullets, and the addition was item 7 — correcting that here rather
+than editing the original entry, per the append-only log design.)
+

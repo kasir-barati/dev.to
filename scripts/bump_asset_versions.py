@@ -34,6 +34,7 @@ ARTICLES_DIR = Path("articles")
 MD_IMAGE_RE = re.compile(r"(!\[[^\]]*\]\(\s*)([^)\s]+)(\s+[\"'][^\"']*[\"'])?(\s*\))")
 HTML_IMAGE_RE = re.compile(r"(<img[^>]+src=[\"'])([^\"']+)([\"'])")
 COVER_IMAGE_RE = re.compile(r"^(cover_image:\s*[\"']?)([^\"'\s]+)([\"']?\s*)$", re.MULTILINE)
+FRONTMATTER_RE = re.compile(r"^---\n.*?\n---\n", re.DOTALL)
 
 # Code block exclusion patterns
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
@@ -123,7 +124,20 @@ def bump_references(text: str, asset_filename: str, token: str) -> tuple[str, bo
 
     text = _sub_outside_code(MD_IMAGE_RE, text, sub_md)
     text = _sub_outside_code(HTML_IMAGE_RE, text, sub_html)
-    text = COVER_IMAGE_RE.sub(sub_cover, text, count=1)
+
+    # cover_image only ever lives in frontmatter — restrict the substitution
+    # to that span so a fenced YAML example elsewhere in the body (e.g. one
+    # documenting this very pipeline) can never be mistaken for the real
+    # thing and corrupted with an injected ?v= token.
+    fm_match = FRONTMATTER_RE.match(text)
+    if fm_match:
+        frontmatter = text[: fm_match.end()]
+        rest = text[fm_match.end() :]
+        text = COVER_IMAGE_RE.sub(sub_cover, frontmatter, count=1) + rest
+    # else: no frontmatter block (malformed article) — skip cover_image
+    # handling entirely rather than falling back to scanning the whole
+    # document.
+
     return text, changed
 
 
@@ -146,10 +160,10 @@ def main(argv: list[str]) -> int:
             print(f"warning: cannot resolve {asset_path} at HEAD (deleted or invalid path); skipping", file=sys.stderr)
             continue
 
-        text = article.read_text()
+        text = article.read_text(encoding="utf-8")
         new_text, changed = bump_references(text, asset_path.name, token)
         if changed:
-            article.write_text(new_text)
+            article.write_text(new_text, encoding="utf-8")
             touched.add(str(article))
         else:
             print(f"warning: {article} has no reference to {asset_path.name}; not republished", file=sys.stderr)
