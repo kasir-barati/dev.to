@@ -12,10 +12,11 @@ actually behaves today (including known gaps), `AGENTS.md` has the repo's
 content/validation rules your scripts must enforce.
 
 Constraints:
-- `publish.yml`, `schedule.yml`, `validate.yml`, and `audit.yml` share the
-  `devto-main-write` concurrency group because all but `validate.yml` can
-  push to `main` — don't remove that without understanding why (races
-  between them).
+- `publish.yml` and `schedule.yml` share the `devto-main-write` concurrency
+  group because both can push to `main` — don't remove that without
+  understanding why (races between them). `audit.yml` has its own separate
+  `devto-audit` group and `validate.yml` its own `validate-${{ github.ref }}`
+  group — neither shares `devto-main-write`.
 - `DEVTO_API_KEY` is passed to devto-cli as the `DEVTO_TOKEN` env var,
   never a CLI flag (keeps it out of the runner's process table) — preserve
   that pattern in any step you touch.
