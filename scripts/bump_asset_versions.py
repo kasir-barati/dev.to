@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Cache-bust image references when their backing asset file changes.
+"""
+Cache-bust image references when their backing asset file changes.
 
 devto-cli only re-publishes an article when its markdown content differs
-from what's already live (strict frontmatter+body equality, `date`
-excluded — see article.ts's `checkIfArticleNeedsUpdate`/`areArticlesEqual`
-in @sinedied/devto-cli). Editing an asset file (e.g. a diagram PNG) under
+from what's already live. Editing an asset file (e.g. a diagram PNG) under
 articles/assets/<slug>/ doesn't change the article's markdown, so a plain
 `dev push` silently skips it. This script closes that gap: given the asset
 paths that changed in a push, it finds the owning article and bumps a
@@ -15,8 +14,7 @@ Usage:
     python scripts/bump_asset_versions.py articles/assets/foo/diagram.png [...]
 
 Prints the article path(s) it modified, one per line, to stdout. Prints a
-warning to stderr (does not fail) for any asset path with no owning
-article.
+warning to stderr (does not fail) for any asset path with no owning article.
 """
 
 from __future__ import annotations
@@ -41,7 +39,9 @@ CODE_RE = re.compile(f"(?:{FENCE_RE.pattern})|(?:{INLINE_CODE_RE.pattern})", re.
 
 
 def owning_article(asset_path: Path) -> Path | None:
-    """articles/assets/<slug>/... -> articles/<slug>.md, if it exists."""
+    """
+    articles/assets/<slug>/... -> articles/<slug>.md, if it exists.
+    """
     parts = asset_path.parts
     if len(parts) < 3 or parts[0] != "articles" or parts[1] != "assets":
         return None
@@ -51,7 +51,9 @@ def owning_article(asset_path: Path) -> Path | None:
 
 
 def version_token(asset_path: Path) -> str:
-    """Short git blob hash of asset_path at HEAD — deterministic per content."""
+    """
+    Short git blob hash of asset_path at HEAD — deterministic per content.
+    """
     result = subprocess.run(
         ["git", "rev-parse", "--short", f"HEAD:{asset_path.as_posix()}"],
         capture_output=True,
@@ -67,7 +69,9 @@ def _bump_query(url: str, token: str) -> str:
 
 
 def _sub_outside_code(regex: re.Pattern, text: str, replacer) -> str:
-    """Apply regex.sub(replacer, ...) only to the parts of text NOT inside a fenced code block or inline code span."""
+    """
+    Apply regex.sub(replacer, ...) only to the parts of text NOT inside a fenced code block or inline code span.
+    """
     result = []
     last = 0
     for code_match in CODE_RE.finditer(text):
@@ -80,7 +84,8 @@ def _sub_outside_code(regex: re.Pattern, text: str, replacer) -> str:
 
 
 def bump_references(text: str, asset_filename: str, token: str) -> tuple[str, bool]:
-    """Rewrite image refs pointing at asset_filename to carry ?v=token.
+    """
+    Rewrite image refs pointing at asset_filename to carry ?v=token.
 
     Matches on filename, not full path, so it works whether the article
     uses a relative markdown/HTML path or (for cover_image) an
@@ -168,6 +173,7 @@ def main(argv: list[str]) -> int:
 
     for path in sorted(touched):
         print(path)
+
     return 0
 
 
