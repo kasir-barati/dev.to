@@ -8,7 +8,7 @@ tags:
   - claude
   - productivity
 cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/debugging-with-coding-agents-systematic/cover.png'
-Series: Agentic Programming
+series: Agentic Programming
 id: 4471195
 date: '2026-08-24T03:51:32Z'
 ---
