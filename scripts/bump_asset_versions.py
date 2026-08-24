@@ -31,9 +31,14 @@ from pathlib import Path
 
 ARTICLES_DIR = Path("articles")
 
-MD_IMAGE_RE = re.compile(r"(!\[[^\]]*\]\()([^)\s]+)(\))")
+MD_IMAGE_RE = re.compile(r"(!\[[^\]]*\]\(\s*)([^)\s]+)(\s+[\"'][^\"']*[\"'])?(\s*\))")
 HTML_IMAGE_RE = re.compile(r"(<img[^>]+src=[\"'])([^\"']+)([\"'])")
 COVER_IMAGE_RE = re.compile(r"^(cover_image:\s*[\"']?)([^\"'\s]+)([\"']?\s*)$", re.MULTILINE)
+
+# Code block exclusion patterns
+FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
+CODE_RE = re.compile(f"(?:{FENCE_RE.pattern})|(?:{INLINE_CODE_RE.pattern})", re.DOTALL)
 
 
 def owning_article(asset_path: Path) -> Path | None:
@@ -62,6 +67,19 @@ def _bump_query(url: str, token: str) -> str:
     return f"{base}?v={token}"
 
 
+def _sub_outside_code(regex: re.Pattern, text: str, replacer) -> str:
+    """Apply regex.sub(replacer, ...) only to the parts of text NOT inside a fenced code block or inline code span."""
+    result = []
+    last = 0
+    for code_match in CODE_RE.finditer(text):
+        before = text[last : code_match.start()]
+        result.append(regex.sub(replacer, before))
+        result.append(code_match.group(0))  # unchanged — inside code, never substitute
+        last = code_match.end()
+    result.append(regex.sub(replacer, text[last:]))
+    return "".join(result)
+
+
 def bump_references(text: str, asset_filename: str, token: str) -> tuple[str, bool]:
     """Rewrite image refs pointing at asset_filename to carry ?v=token.
 
@@ -72,17 +90,40 @@ def bump_references(text: str, asset_filename: str, token: str) -> tuple[str, bo
     """
     changed = False
 
-    def sub(m: re.Match) -> str:
+    def sub_md(m: re.Match) -> str:
         nonlocal changed
-        prefix, url, suffix = m.group(1), m.group(2), m.group(3)
+        prefix = m.group(1)
+        url = m.group(2)
         if Path(url.split("?", 1)[0]).name != asset_filename:
             return m.group(0)
         changed = True
+        title = m.group(3) or ""
+        suffix = m.group(4)
+        return f"{prefix}{_bump_query(url, token)}{title}{suffix}"
+
+    def sub_html(m: re.Match) -> str:
+        nonlocal changed
+        prefix = m.group(1)
+        url = m.group(2)
+        if Path(url.split("?", 1)[0]).name != asset_filename:
+            return m.group(0)
+        changed = True
+        suffix = m.group(3)
         return f"{prefix}{_bump_query(url, token)}{suffix}"
 
-    text = MD_IMAGE_RE.sub(sub, text)
-    text = HTML_IMAGE_RE.sub(sub, text)
-    text = COVER_IMAGE_RE.sub(sub, text, count=1)
+    def sub_cover(m: re.Match) -> str:
+        nonlocal changed
+        prefix = m.group(1)
+        url = m.group(2)
+        if Path(url.split("?", 1)[0]).name != asset_filename:
+            return m.group(0)
+        changed = True
+        suffix = m.group(3)
+        return f"{prefix}{_bump_query(url, token)}{suffix}"
+
+    text = _sub_outside_code(MD_IMAGE_RE, text, sub_md)
+    text = _sub_outside_code(HTML_IMAGE_RE, text, sub_html)
+    text = COVER_IMAGE_RE.sub(sub_cover, text, count=1)
     return text, changed
 
 
@@ -110,6 +151,8 @@ def main(argv: list[str]) -> int:
         if changed:
             article.write_text(new_text)
             touched.add(str(article))
+        else:
+            print(f"warning: {article} has no reference to {asset_path.name}; not republished", file=sys.stderr)
 
     for path in sorted(touched):
         print(path)
