@@ -6,10 +6,12 @@ change to `.github/workflows/**` or `scripts/**`.
 
 ## Current CI pipeline
 
-Four workflows in `.github/workflows/`. `publish.yml`, `schedule.yml`, and
-`audit.yml` share the `devto-main-write` concurrency group with each other
-since all three can push to `main` — `validate.yml` never pushes, so it's
-not in that group.
+Four workflows in `.github/workflows/`. `publish.yml` and `schedule.yml`
+share the `devto-main-write` concurrency group with each other since both
+can push to `main`. `audit.yml` also pushes to `main` (its weekly index
+refresh) but has its own separate `devto-audit` group — it is not
+serialized against `publish.yml`/`schedule.yml`. `validate.yml` has its
+own `validate-${{ github.ref }}` group and never pushes.
 
 - **`validate.yml`** — gates PRs and pushes. Diffs against a resolved base
   revision, then runs `validate_articles.py`, `lint_ratchet.py` (fails
