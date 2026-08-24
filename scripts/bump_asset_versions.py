@@ -9,9 +9,7 @@ articles/assets/<slug>/ doesn't change the article's markdown, so a plain
 `dev push` silently skips it. This script closes that gap: given the asset
 paths that changed in a push, it finds the owning article and bumps a
 `?v=<token>` query string on the matching image reference(s) — a real
-content change devto-cli will pick up. See
-docs/superpowers/specs/2026-08-24-agent-harness-design.md for the
-investigation behind this.
+content change devto-cli will pick up.
 
 Usage:
     python scripts/bump_asset_versions.py articles/assets/foo/diagram.png [...]
