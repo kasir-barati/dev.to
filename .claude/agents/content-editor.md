@@ -18,8 +18,7 @@ Hard rules (from AGENTS.md):
 - `cover_image`: absolute `raw.githubusercontent.com` URL (generate via
   `python scripts/gen_cover_image.py`), never a relative path — devto-cli
   does not rewrite it.
-- `series`: must match an existing series name exactly — check `INDEX.md`
-  first. A near-miss creates a second series on dev.to.
+- `series`: must match an existing series name exactly if you have one. Otherwise dev.to creates a second series.
 - Assets for an article live under `articles/assets/<slug>/` and are
   referenced from the article body with relative `./assets/<slug>/...`
   paths — never write an absolute URL for an inline image yourself,
