@@ -99,7 +99,12 @@ def main(argv: list[str]) -> int:
             print(f"warning: no owning article for {asset_path}", file=sys.stderr)
             continue
 
-        token = version_token(asset_path)
+        try:
+            token = version_token(asset_path)
+        except subprocess.CalledProcessError:
+            print(f"warning: cannot resolve {asset_path} at HEAD (deleted or invalid path); skipping", file=sys.stderr)
+            continue
+
         text = article.read_text()
         new_text, changed = bump_references(text, asset_path.name, token)
         if changed:
