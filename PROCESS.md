@@ -103,3 +103,16 @@ orchestrator.
 6. **Last step, always, before the orchestrator ends the task**: invoke
    `self-improvement`. This is not optional and is not skipped for small
    tasks. See `SELF_IMPROVEMENT.md`.
+7. **Same-session limitation**: a subagent defined in
+   `.claude/agents/*.md` cannot be dispatched by name in the same session
+   that created or edited its file — the harness loads the custom-agent
+   list once at session start and does not rescan it. If dispatch by name
+   fails for an agent you know exists on disk, don't treat that as the
+   agent missing: brief a generic agent with the target persona's file
+   contents verbatim (name, description, tools restriction, and full body)
+   and have it self-enforce the tool restriction. This is weaker than real
+   enforcement — a generically-typed agent keeps full tool access even
+   when told not to use some of it — so scope the workaround prompt
+   narrowly and call out anywhere the task depends on the restriction
+   actually holding. A fresh session picks up the new agent file normally;
+   this workaround is only needed within the session that authored it.
