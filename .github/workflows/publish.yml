@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'articles/**/*.md'
+      - 'articles/assets/**'
   workflow_dispatch:
     inputs:
       scope:
@@ -70,6 +71,36 @@ jobs:
               base="$(git rev-parse "${AFTER}^" 2>/dev/null || echo "$AFTER")"
             fi
             git diff -z --name-only --diff-filter=d "$base" "$AFTER" -- ':(glob)articles/*.md' > "$list"
+
+            # Asset-only changes don't touch the article's markdown, but the
+            # article still needs to be re-pushed so devto-cli's diff check
+            # (full file content equality) picks up the cache-busted image
+            # reference bump_asset_versions.py is about to write. See
+            # docs/superpowers/specs/2026-08-24-agent-harness-design.md.
+            assets_list="${RUNNER_TEMP}/articles-assets.nul"
+            git diff -z --name-only --diff-filter=d "$base" "$AFTER" -- ':(glob)articles/assets/**' > "$assets_list"
+            asset_files=()
+            mapfile -d '' -t asset_files < "$assets_list"
+            if [ "${#asset_files[@]}" -gt 0 ]; then
+              bumped_articles=()
+              mapfile -t bumped_articles < <(python scripts/bump_asset_versions.py "${asset_files[@]}")
+              if [ "${#bumped_articles[@]}" -gt 0 ]; then
+                files=()
+                mapfile -d '' -t files < "$list"
+                for a in "${bumped_articles[@]}"; do
+                  files+=("$a")
+                done
+                printf '%s\0' "${files[@]}" | python3 -c "
+          import sys
+          seen = []
+          for chunk in sys.stdin.buffer.read().split(b'\0'):
+              if chunk and chunk not in seen:
+                  seen.append(chunk)
+          sys.stdout.buffer.write(b'\0'.join(seen))
+          sys.stdout.buffer.write(b'\0' if seen else b'')
+          " > "$list"
+              fi
+            fi
           fi
 
           files=()
