@@ -30,21 +30,34 @@ Run a single script directly for narrower checks, e.g. `python scripts/validate_
 ## Directory Structure
 
 - `articles/*.md`: top-level, published articles. Only these are synced to dev.to (`git diff ... -- ':(glob)articles/*.md'` in the workflows deliberately excludes subdirectories).
-- `articles/TIL/`, `articles/assets/<slug>/`: TIL notes and per-article assets (images, `diagrams/*.d2` sources + rendered PNGs). Assets referenced from an article must use `./assets/<slug>/...` relative paths in the repo but resolve to absolute `raw.githubusercontent.com` URLs after `dev push` rewrites them.
+- `articles/TIL/`, `articles/assets/<slug>/`: TIL notes and per-article assets (images, `diagrams/*.d2` sources + rendered PNGs). Assets referenced from an article must use `./assets/<slug>/...` relative paths in the repo but resolve to absolute `raw.githubusercontent.com` URLs after `dev push` rewrites them. A `?v=<token>` query string sometimes appended to an image reference is written automatically by `scripts/bump_asset_versions.py` when its asset changes — never hand-author or hand-edit one.
 - `articles/DRAFT/`, `articles/JA/`: gitignored, local-only (drafts, Japanese translations. You can create new gitignored dirs for other languages the same way). Never reach dev.to or git history.
 - `scripts/`: all repo tooling, plain Python (PyYAML + python-dateutil; Pillow only for `gen_cover_image.py`, kept out of `requirements.txt` so the hourly scheduler workflow doesn't pay for that wheel).
 - `templates/article-template.md`: starting frontmatter/section skeleton for a new article.
 
 ## CI Mechanics -- `.github/workflows/`
 
-Three workflows share the `devto-main-write` concurrency group with `schedule.yml` since all three can push to `main`, and pushes race otherwise:
+`publish.yml` and `schedule.yml` share the `devto-main-write` concurrency group since both can push to `main`, and pushes would race otherwise. `audit.yml` also pushes to `main` (its weekly index refresh) but has its own separate `devto-audit` group. `validate.yml` has its own `validate-${{ github.ref }}` group and never pushes:
 
-- **`publish.yml`**: on push to `main` touching `articles/**/*.md` (or manual dispatch with `scope: changed|all`). Diffs the push range to find changed top-level articles, validates them, runs one batched `dev push` (devto-cli throttles internally: 30 updates/30s, 10 creates/30s, don't add per-file loops/sleeps around it), then commits any frontmatter it wrote back, retrying the push up to 3x with rebase-and-retry on conflict.
+- **`publish.yml`**: on push to `main` touching `articles/**/*.md` or `articles/assets/**` (or manual dispatch with `scope: changed|all`). Diffs the push range to find changed top-level articles and any articles whose assets changed; for asset-only changes, `scripts/bump_asset_versions.py` cache-busts the affected image reference with a `?v=<token>` query string first (devto-cli only republishes when an article's markdown content differs from what's already live, so an asset-only edit needs a real content change to actually reach dev.to — see `PROCESS.md` for the full explanation). Validates the merged list, runs one batched `dev push` (devto-cli throttles internally: 30 updates/30s, 10 creates/30s, don't add per-file loops/sleeps around it), then commits any frontmatter devto-cli wrote back plus any version-bump edits, retrying the push up to 3x with rebase-and-retry on conflict.
 - **`schedule.yml`**: hourly cron. Runs `publish_scheduler.py`, which flips `published: true` on articles whose scheduled `date` has arrived, and commits (deliberately without `[skip ci]`, this commit is what triggers `publish.yml`).
 - **`validate.yml`**: gates PRs and pushes. Diffs against a resolved base revision, then runs `validate_articles.py`, `lint_ratchet.py` (fails only on *new* markdownlint errors relative to base. Old articles predating the linter are grandfathered), and `check_links.py`, scoped to changed files only. Also emits a repo-wide validation report to the job summary (`--all --format=md`), non-blocking.
 - **`audit.yml`**: weekly, report-only: full-corpus validation, third-party link-rot check, `dev push --dry-run` drift check against live dev.to, refreshes `INDEX.md` and the README stats block.
 
 `DEVTO_API_KEY` repo secret is required for publishing; passed to devto-cli as the `DEVTO_TOKEN` env var (never a CLI flag, to keep it out of the runner's process table).
+
+## Process
+
+`PROCESS.md` documents the CI pipeline in detail and defines the agent
+handoff protocol for Claude Code work in this repo. Two gates in it are
+mandatory, not optional:
+
+- Any diff touching `.github/workflows/**` or `scripts/**` must go through
+  the read-only `reviewer` agent (`.claude/agents/reviewer.md`) before it's
+  committed.
+- The `self-improvement` agent (`.claude/agents/self-improvement.md`) must
+  run as the last step of any task that went through this protocol, before
+  the task is considered done.
 
 ## Validation Rules (`scripts/validate_articles.py`)
 
