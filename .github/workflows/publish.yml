@@ -82,8 +82,10 @@ jobs:
             asset_files=()
             mapfile -d '' -t asset_files < "$assets_list"
             if [ "${#asset_files[@]}" -gt 0 ]; then
+              bump_output="${RUNNER_TEMP}/bump-output.txt"
+              python scripts/bump_asset_versions.py "${asset_files[@]}" > "$bump_output"
               bumped_articles=()
-              mapfile -t bumped_articles < <(python scripts/bump_asset_versions.py "${asset_files[@]}")
+              mapfile -t bumped_articles < "$bump_output"
               if [ "${#bumped_articles[@]}" -gt 0 ]; then
                 files=()
                 mapfile -d '' -t files < "$list"
