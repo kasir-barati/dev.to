@@ -18,11 +18,12 @@ CHANGED := $(shell git diff --name-only --diff-filter=d $(BASE)...HEAD -- 'artic
 help: ## Show this help
 	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-setup: ## Create .venv and install script dependencies
+setup: ## Setup app on your local machine
 	python3 -m venv .venv
 	.venv/bin/pip install --quiet --upgrade pip
-	.venv/bin/pip install --quiet -r scripts/requirements.txt -r scripts/requirements-images.txt
-	@echo "[+] .venv ready"
+	.venv/bin/pip install --quiet -r scripts/requirements.txt -r scripts/requirements-images.txt -r scripts/requirements-dev.txt
+	.venv/bin/pre-commit install --install-hooks
+	@echo "[+] .venv ready, pre-commit hook installed"
 
 check: validate lint links ## Run every check CI runs, over the whole repo
 

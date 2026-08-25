@@ -1,0 +1,2 @@
+# Only `make setup` installs this. Kept out of requirements.txt so CI — including the hourly schedule.yml cron — never installs a tool no workflow invokes; see requirements-images.txt for the same pattern.
+pre-commit==4.6.2

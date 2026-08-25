@@ -40,6 +40,10 @@ own `validate-${{ github.ref }}` group and never pushes.
 devto-cli as the `DEVTO_TOKEN` env var (never a CLI flag, to keep it out
 of the runner's process table).
 
+## Local pre-commit gate
+
+`make setup` registers a git pre-commit hook (`.pre-commit-config.yaml`) that runs `validate_articles.py` against staged top-level articles — the same check `validate.yml` gates on, run locally before the commit exists instead of after a push. It's a convenience, not a replacement for `validate.yml`: it only sees staged `articles/*.md` files, so an asset-only edit or a reference to an asset that hasn't been `git add`ed yet still reaches CI unchecked and must be caught there. `pre-commit` itself lives in `scripts/requirements-dev.txt`, not `requirements.txt`, so no workflow installs it.
+
 ## Asset republish fix
 
 **The problem this closes:** `@sinedied/devto-cli` decides whether to call

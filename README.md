@@ -79,6 +79,10 @@ A repo secret `DEVTO_API_KEY` is required; generate it from your dev.to account 
 
 `audit.yml` runs weekly and reports rather than blocks: full-corpus validation, third-party link rot, a `dev push --dry-run` drift check against dev.to, and a refresh of `INDEX.md` and the stats block above.
 
+### Local setup
+
+Run `make setup` once after cloning.
+
 You can see what targets we have by running:
 
 ```bash

@@ -1,0 +1,13 @@
+default_install_hook_types: [pre-commit]
+
+repos:
+  - repo: local
+    hooks:
+      - id: validate-articles
+        name: Validate article frontmatter and assets
+        description: Catches frontmatter/asset errors (e.g. a cover_image or inline image pointing at a missing file) before they reach CI. Only runs against staged top-level articles/*.md; does not catch asset-only edits or a reference to a not-yet-`git add`ed asset — see scripts/validate_articles.py.
+        entry: make validate
+        language: python
+        # Mirrors scripts/requirements.txt's PyYAML pin — pre-commit's own dependency updater does not track additional_dependencies in a `local` hook, so Dependabot bumping requirements.txt won't bump this; bump both together by hand.
+        additional_dependencies: ['PyYAML==6.0.3']
+        pass_filenames: true
