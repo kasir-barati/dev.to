@@ -7,8 +7,10 @@ tags:
   - programming
   - productivity
   - workflow
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/coding-agent-and-workflows/cover.png'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/coding-agent-and-workflows/cover.png?v=6b3083e'
 series: Agentic Programming
+id: 4486684
+date: '2026-08-25T15:58:03Z'
 ---
 
 If you're working with coding agents like Claude Code, GitHub Copilot, or any other AI assistant, you've probably noticed something: they can generate code faster than you can review it. This creates a new set of challenges that traditional development workflows weren't designed to handle.
