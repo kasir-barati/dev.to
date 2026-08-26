@@ -186,6 +186,8 @@ def flash_checkout(products, user_id, idempotency_key):
     return response
 ```
 
+Skills are part of the [harness engineering](https://paelladoc.com/blog/harness-engineering).
+
 ### Add Commands
 
 You can e.g. create a command for labeling GitHub issues:
