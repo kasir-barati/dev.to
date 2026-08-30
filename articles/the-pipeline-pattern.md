@@ -1,14 +1,16 @@
 ---
-title: "The Pipeline Pattern"
+title: The Pipeline Pattern
 published: true
-description: "A practical look at the Pipeline Pattern (Pipes & Filters) using a small Python scraper. The example connects independent stages with queues, uses worker pools for parallelism, and explores fan-out, backpressure, graceful shutdown, and how the same architecture maps to Kafka/RabbitMQ and distributed systems. The key idea: decouple stages, connect them with queues, and scale each stage independently."
+description: 'A practical look at the Pipeline Pattern (Pipes & Filters) using a small Python scraper. The example connects independent stages with queues, uses worker pools for parallelism, and explores fan-out, backpressure, graceful shutdown, and how the same architecture maps to Kafka/RabbitMQ and distributed systems. The key idea: decouple stages, connect them with queues, and scale each stage independently.'
 tags:
   - python
   - systemdesign
   - concurrency
   - architecture
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/the-pipeline-pattern/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/the-pipeline-pattern/cover.png?v=7bd6b49'
 series: System Design
+id: 4529042
+date: '2026-08-30T13:55:51Z'
 ---
 
 I watched a nice video about a small multi-stage scraper: it was basically scraping [S&P 500 tickers from Wikipedia](https://en.wikipedia.org/wiki/List_of_S%26P_500_companies), fetch a live price for each from [Yahoo Finance](https://finance.yahoo.com/quote/AAPL/), and write the results to Postgres. Each stage runs its own pool of worker threads, and stages talk to each other through queues. So I just decided to write about it since it is a nice distributed-systems design pattern.
