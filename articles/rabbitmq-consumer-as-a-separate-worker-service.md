@@ -1,14 +1,16 @@
 ---
-title: 'RabbitMQ Consumer as a Separate Worker Service'
+title: RabbitMQ Consumer as a Separate Worker Service
 published: true
-description: 'A short description of the post.'
+description: A short description of the post.
 tags:
   - nodejs
   - python
   - systemdesign
   - architecture
-cover_image: https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/rabbitmq-consumer-as-a-separate-worker-service/cover.png
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/rabbitmq-consumer-as-a-separate-worker-service/cover.png?v=dc39ea7'
 series: System Design
+id: 4527513
+date: '2026-08-30T09:04:59Z'
 ---
 
 I come from a NodeJS background and honestly there we usually consume messages in the same NestJS app. But 2 years ago (2024) when I started to develop Backend APIs in Python I realized there is a difference in programming language paradigms. In Python I had to either use [asyncio](https://docs.python.org/3/library/asyncio.html)/[threads](https://docs.python.org/3/library/threading.html)/[processes](https://docs.python.org/3/library/multiprocessing.html).
