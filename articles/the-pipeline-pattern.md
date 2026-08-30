@@ -394,6 +394,76 @@ if __name__ == "__main__":
     main()
 ```
 
+## More Mature Pipelines
+
+So I guess you have seen it now that if you need to add a new stage/worker to the existing orchestrator you must change the code and write a bunch of code which really feels like boilerplates. So next what you can do is defining your pipeline in a YAML file and then each time you have a new stage/worker you can just need to add it there. So create a `src/pipelines` directory and inside it create a yaml file:
+
+```yaml
+# src/pipelines/wiki_yahoo_scraper_pipeline.yaml
+queues:
+  - name: SymbolQueue
+    description: Contains symbols/tickers to be scraped from Yahoo
+  - name: PostgresUploading
+    description: Contains data that needs to be uploaded to Postgres
+
+workers:
+  - name: WikiWorker
+    description: This scraps Wikipedia page nad extracts symbols/tickets
+    location: workers.wiki
+    class: WikiWorkerMasterScheduler
+    instances: 1
+    input_values:
+      - https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+    output_queues:
+      - SymbolQueue
+  - name: YahooFinanceWorker
+    description: Pulls the stock price of a given ticket from Yahoo Finance
+    location: workers.yahoo_finance_price
+    class: YahooFinancePriceScheduler
+    instances: 4
+    input_queue: SymbolQueue
+    output_queues:
+      - PostgresUploading
+  - name: PostgresWorker
+    description: Stores stock data in Postgres
+    location: workers.postgres
+    class: PostgresMasterScheduler
+    instances: 4
+    input_queue: PostgresUploading
+```
+
+So as you can see with this you are effectively moving the logic of your pipeline into a config file which is written in YAML. And this makes your orchestrator cleaner and you can easily reason about your pipeline without having to read a bunch of python code. Also it makes it easier to differentiate between when you wanna e.g. change the URL you use for scraping data from it, from implementation changes you had to make to the code itself.
+
+Easier time to review and understand what was changed in a PR/commit. And now your `src/main.py` would look a lot nicer with less manual steps involved:
+
+```py
+"""Wires the wiki -> Yahoo Finance -> Postgres pipeline together and runs it."""
+
+from __future__ import annotations
+
+import time
+from pathlib import Path
+
+from pipelines.reader import YamlPipelineExecutor
+
+
+def main() -> None:
+    scraper_start_time = time.time()
+    pipeline_location = Path(__file__).parent / 'pipelines' / 'wiki_yahoo_scraper_pipeline.yaml'
+    yaml_pipeline_executor = YamlPipelineExecutor(pipeline_location=pipeline_location)
+    yaml_pipeline_executor.process_pipeline()
+    
+    elapsed = time.time() - scraper_start_time
+
+    print(f"Finished in {elapsed:.2f}s")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+I did NOT add `YamlPipelineExecutor` code here. But that was not the only change I had to make to make this pipeline work with the aforementioned yaml file. You can see the [complete example here](https://github.com/kasir-barati/python/tree/bf47c7b1c9b629e24b6730e01ea0e3ea4e43c074/tips/examples/scrapper-pipeline-design-pattern).
+
 ---
 
 If you've built something similar, especially across process or machine boundaries with a real broker instead of an in-memory queues I'd love to hear how you handled backpressure and shutdown.
