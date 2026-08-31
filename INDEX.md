@@ -2,20 +2,29 @@
 
 # Article index
 
-4 article(s) in this repository, 4 published to [dev.to/kanywst](https://dev.to/kanywst), across 1 series.
+8 article(s) in this repository, 8 published to [dev.to/kanywst](https://dev.to/kanywst), across 2 series.
 
 ## Series
 
-### Agentic Programming (2)
+### Agentic Programming (5)
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
+| Coding Agents & Workflows | `llm`, `programming`, `productivity`, `workflow` | pending |  | [src](./articles/coding-agent-and-workflows.md) |
+| Debugging with Coding Agents -- A Systematic Strategy That Actually Works | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/debugging-with-coding-agents-systematic.md) |
+| Subagenting | `llm`, `programming`, `productivity` | pending |  | [src](./articles/subagenting.md) |
 | Understanding MCP, Skills, and Plugins | `ai`, `llm`, `vibeengineering` | pending |  | [src](./articles/understanding-mcp-skills-and-plugins-in-coding-agents.md) |
 | Vibe Engineering -- Responsible use of LLMs | `ai`, `llm`, `productivity` | pending |  | [src](./articles/vibe-engineering-resposible-use-of-llms.md) |
+
+### System Design (2)
+
+| Article | Tags | Published | Engagement | Source |
+| --- | --- | --- | --- | --- |
+| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/rabbitmq-consumer-as-a-separate-worker-service.md) |
+| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/the-pipeline-pattern.md) |
 
 ## Standalone
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
-| Debugging with Coding Agents -- A Systematic Strategy That Actually Works | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/debugging-with-coding-agents-systematic.md) |
 | Switched to VCS Instead of the Crappy UI of DEV.to | `blogging`, `gitops` | pending |  | [src](./articles/switched-to-vcs-instead-of-the-crappy-ui-of-dev.to.md) |
