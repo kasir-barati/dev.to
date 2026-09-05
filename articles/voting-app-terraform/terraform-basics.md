@@ -1,14 +1,16 @@
 ---
-title: "Terraform Basics"
+title: Terraform Basics
 published: true
-description: "The first part of a series provisioning a real Amazon EKS cluster with Terraform from zero: what Infrastructure as Code actually means, the four HCL blocks you'll see constantly, the four-command workflow, and the one file (state) you must never hand-edit."
+description: 'The first part of a series provisioning a real Amazon EKS cluster with Terraform from zero: what Infrastructure as Code actually means, the four HCL blocks you''ll see constantly, the four-command workflow, and the one file (state) you must never hand-edit.'
 tags:
   - iac
   - aws
   - terraform
   - kubernetes
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/terraform-basics/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/terraform-basics/cover.png?v=164e88c'
 series: Voting App Terraform
+id: 4583571
+date: '2026-09-05T17:22:43Z'
 ---
 
 This is the first part of a real Terraform setup that provisions a brand new Amazon EKS cluster (VPC, control plane, worker nodes — everything, no pre-existing cluster assumed) and deploys a small multi-service voting app onto it. It assumes **no prior Terraform knowledge**, and I use Kubernetes manifests to deploy the app.
