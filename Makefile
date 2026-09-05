@@ -20,6 +20,7 @@ SERIES_PATHSPECS := ':(glob)articles/*.md' ':(glob)articles/*/*.md' \
 
 # Articles touched relative to $(BASE), which is what CI gates on.
 CHANGED := $(shell git diff --name-only --diff-filter=d $(BASE)...HEAD -- $(SERIES_PATHSPECS) 2>/dev/null; \
+                   git diff --name-only --diff-filter=d --cached -- $(SERIES_PATHSPECS) 2>/dev/null; \
                    git diff --name-only --diff-filter=d -- $(SERIES_PATHSPECS) 2>/dev/null; \
                    git ls-files --others --exclude-standard -- $(SERIES_PATHSPECS) 2>/dev/null)
 
