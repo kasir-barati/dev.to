@@ -28,7 +28,7 @@ The first stage (no inbound queue) is the **source** or **producer**. The last s
 
 In the following example we have:
 
-```
+```text
 WikiWorker (source)
     -> symbol_queue
         -> YahooFinancePriceScheduler x4 (filter, fanned out)
@@ -40,7 +40,7 @@ Another example which I believe is a strong candidate for this design pattern is
 
 A natural shape:
 
-```
+```text
 Source: raw data ingestion (files, API, scrape, DB change stream)
     -> raw_queue
         -> Preprocessing stage (clean/chunk/normalize) x N workers

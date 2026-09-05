@@ -268,11 +268,14 @@ Basically anything you usually need to work on that codebase. But make sure to k
 - Clear your context with `/clear` and start fresh when needed.
 - Write summaries to markdown to preserve important info before clearing. This is where a `PLAN.md` or similar progress log earns its keep: treat it as your project memory and communication log, not just a one-off note.
 - Work in bite-sized chunks. So instead of:
-  ```
+
+  ```text
   Hey agent, refactor this 50-person project's entire codebase.
   ```
+
   Try to ask LLM:
-  ```
+
+  ```text
   Break this large task into 10 small, specific steps. Where each step should be independently:
   - Specifiable.
   - Testable.
@@ -283,14 +286,14 @@ Basically anything you usually need to work on that codebase. But make sure to k
 
 It is a good practice to start with writing a `PLAN.md` to brainstorm what you wanna do. In fact, that's why I downloaded [the brainstorming skill from the superpowers plugin](https://github.com/obra/superpowers/tree/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/brainstorming). So next time you wanna develop a feature which is big enough for the LLM to derail or misunderstand how it should work, first ask it to brainstorm and write a plan for you. Review and work on that plan, then start with implementing it. So if I wanted to visualize this:
 
-```
+```text
 [Explore] => [Plan] => [Confirm] => [Code] => [Commit]
 ```
 
 The prompt would be:
 
 > Figure out the root cause for issue #983, then propose a few fixes. Let me choose an approach before you code. ultrathink
-
+>
 > 💡 **Pro Tip**
 >
 > "ultrathink" is a special "magic keyword" you can add anywhere in your prompt to trigger a maximum reasoning depth mode for that specific request.
@@ -306,7 +309,7 @@ If you give your coding agent a way to measure how good it did, the results woul
 3. Write acceptance criteria in a markdown files similar to what you usually get in a Jira ticket written by a product owner:
    > Take @specs/payment-flow.md as the source of truth. Write e2e integration tests that mirror each acceptance scenario exactly. Run the tests, and they should fail initially. Then implement the @api/payment/ module and keep iterating until every test passes. Let me know which ACs were tricky or ambiguous.
    Or you can e.g. write
-   > Let's work on https://acmecorp.atlassian.net/browse/PAY-842. Treat each bullet point in acceptance criteria section as a hard pass/fail criterion. Build the @app/checkout feature, then simulate a full user journey through the UI (using Playwright) and check each block. If a step fails, pause, fix, and re-run until the entire ticket is green. Do not mark the ticket as done until all checks pass.
+   > Let's work on <https://acmecorp.atlassian.net/browse/PAY-842>. Treat each bullet point in acceptance criteria section as a hard pass/fail criterion. Build the @app/checkout feature, then simulate a full user journey through the UI (using Playwright) and check each block. If a step fails, pause, fix, and re-run until the entire ticket is green. Do not mark the ticket as done until all checks pass.
 
 ---
 
@@ -332,7 +335,7 @@ If you give your coding agent a way to measure how good it did, the results woul
 - Be ruthless about code quality.
 - Ensure everything you push is clean, purposeful, and well-written.
 
-Remember I have already talked about it [here](https://dev.to/kasir-barati/pragmatic-agentic-programmer-994). This is code you stand behind.
+Remember I have already talked about it [in my post on pragmatic agentic programming](https://dev.to/kasir-barati/pragmatic-agentic-programmer-994). This is code you stand behind.
 
 > **Key Takeaway**
 >
@@ -381,6 +384,6 @@ Save the results in a separate branch, and compare it against your first attempt
 
 ---
 
-## References:
+## References
 
 [Mastering Claude Code in 30 minutes](https://www.youtube.com/live/6eBSHbLKuN0?si=Yy7r9-5OFapkoXuJ).

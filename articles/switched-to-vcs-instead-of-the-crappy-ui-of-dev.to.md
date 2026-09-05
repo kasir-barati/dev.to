@@ -5,9 +5,9 @@ description: I really hate how the UI of DEV.to messed up with my post after I t
 tags:
   - blogging
   - gitops
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/switched-to-vcs-instead-of-the-crappy-ui-of-dev.to/cover.png'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/switched-to-vcs-instead-of-the-crappy-ui-of-dev.to/cover.png"
 id: 4459793
-date: '2026-08-22T08:39:38Z'
+date: "2026-08-22T08:39:38Z"
 ---
 
 ## How this Started?
@@ -16,7 +16,7 @@ I initially wrote a post on DEV.to a couple of days ago (2026.08.17). Then today
 
 ## Solution
 
-I asked Deepseek about what I can do, it suggested to using Wordpress, or Ghost. But when I asked it that even those platforms are 3rd part solutions and I might end up seeing the same thing. So I asked it how can I utilize git and VCS instead. Then it said to me about gitops for blogging approach. Then when I googled it I found this post: https://dev.to/kanywst/hello-world-managing-devto-articles-with-gitops-5594
+I asked Deepseek about what I can do, it suggested to using Wordpress, or Ghost. But when I asked it that even those platforms are 3rd part solutions and I might end up seeing the same thing. So I asked it how can I utilize git and VCS instead. Then it said to me about gitops for blogging approach. Then when I googled it I found [this post](https://dev.to/kanywst/hello-world-managing-devto-articles-with-gitops-5594)
 
 So kudos to [kanywst](https://dev.to/kanywst).
 

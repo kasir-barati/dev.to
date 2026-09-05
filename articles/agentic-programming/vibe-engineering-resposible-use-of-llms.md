@@ -51,7 +51,7 @@ In short it is **your job** and **my job** to deliver code that we are **account
 - ✅ **Code review**: make the LLM review its own work. Usually you might wanna ask a different LLM to do the code review. So you are getting a second opinion.
 - ✅ **A weird form of management**: getting good results feels like managing a human collaborator, but with quirks.
 - ✅ **Manual QA**: don't rely only on automation entirely. Test things yourself before asking QA team to take over.
-- ✅ **Strong research skills**: when you hit a wall, step back and try a different approach. Try to start fresh, it really sometimes can help. You cn see a prime example of this [here](https://gist.github.com/kasir-barati/38da1204d1aa79e2cce487df4a1cf220/).
+- ✅ **Strong research skills**: when you hit a wall, step back and try a different approach. Try to start fresh, it really sometimes can help. You cn see [a prime example of this in my notes gist](https://gist.github.com/kasir-barati/38da1204d1aa79e2cce487df4a1cf220/).
 - ✅ **Instinct for what to keep an eye on**, when we have:
   - A pretty standard **frontend** we can delegate freely. The LLM will build it, you give feedback, it improves.
   - But **Backend** is different beast. LLMs often struggle, make bad design decisions, violate DRY principle, use tools that are not the best options out there.

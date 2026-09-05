@@ -15,7 +15,7 @@ date: '2026-08-30T09:04:59Z'
 
 I come from a NodeJS background and honestly there we usually consume messages in the same NestJS app. But 2 years ago (2024) when I started to develop Backend APIs in Python I realized there is a difference in programming language paradigms. In Python I had to either use [asyncio](https://docs.python.org/3/library/asyncio.html)/[threads](https://docs.python.org/3/library/threading.html)/[processes](https://docs.python.org/3/library/multiprocessing.html).
 
-Here is an "at scale" alternative to the multithreading I wrote about [here](https://github.com/kasir-barati/python/blob/main/tips/multithreading.md) in particular (but I believe you can get some inspiration even if you have a subprocess) instead of a background thread living inside a GraphQL API process, the RabbitMQ consumer has its own container, and its own set of configuration. So the flow would look like this:
+Here is an "at scale" alternative to [the multithreading write-up I did](https://github.com/kasir-barati/python/blob/main/tips/multithreading.md) in particular (but I believe you can get some inspiration even if you have a subprocess) instead of a background thread living inside a GraphQL API process, the RabbitMQ consumer has its own container, and its own set of configuration. So the flow would look like this:
 
 ```flow
 ┌─────────────────────────┐
@@ -78,7 +78,7 @@ So this isn't a Python-specific lesson, it's what happens once "a background thi
 
 Set up a monorepo whenever you need to share models/services/repositories. For example you can have an [`api`](https://github.com/kasir-barati/python/tree/34b5d750e15c055ed25f8cd5848b2668cbdde615/tips/examples/rabbitmq-worker-service/api) and a [`worker`](https://github.com/kasir-barati/python/tree/34b5d750e15c055ed25f8cd5848b2668cbdde615/tips/examples/rabbitmq-worker-service/worker) in the same monorepo. They are separately deployables, but they share one database and one set of SQLAlchemy models/repositories, defined once in [`shared`](https://github.com/kasir-barati/python/tree/34b5d750e15c055ed25f8cd5848b2668cbdde615/tips/examples/rabbitmq-worker-service/shared) and imported by both.
 
-## [At Least Once Delivery](https://www.systemoverflow.com/learn/design-fundamentals/communication-patterns/idempotency-at-least-once-delivery-and-the-outbox-inbox-pattern) Guarantee 
+## [At Least Once Delivery](https://www.systemoverflow.com/learn/design-fundamentals/communication-patterns/idempotency-at-least-once-delivery-and-the-outbox-inbox-pattern) Guarantee
 
 In [the linked example](https://github.com/kasir-barati/python/tree/34b5d750e15c055ed25f8cd5848b2668cbdde615/tips/examples/rabbitmq-worker-service) we have two separate hops, because they have very different guarantees.
 
@@ -103,6 +103,6 @@ This is the part that isn't gracefully handled, and your instinct is right.
 >
 > 1. Give each RabbitMQ message a stable ID, derive one deterministically (e.g. hash of the email, or client whom is initiating this whole pipeline can send one, or we could simply use the ID generated and returned by database engine) so that a crash-retry reproduces the same ID rather than minting a new one.
 > 2. Carry that ID through: RabbitMQ message → Redis publish payload (as JSON: {"id": ..., "email": ...} instead of a bare string) → the Subscription.queue_messages yield → the GraphQL client.
-> 3. The GraphQL client keeps a small set/LRU of recently-seen IDs and drops repeats — that's effectively an _inbox pattern_ implemented at the client, since the server-side pub/sub layer has no persistence to build a server-side inbox against.
-> 
+> 3. The GraphQL client keeps a small set/LRU of recently-seen IDs and drops repeats — that's effectively an *inbox pattern* implemented at the client, since the server-side pub/sub layer has no persistence to build a server-side inbox against.
+>
 > Whether it's worth doing depends on how much a duplicate matters to your subscribers. Since the downstream effect here is "a user row exists", a duplicate push is currently harmless if the client is also just doing an upsert-style process. It only becomes a real problem if a client does something non-idempotent in response to the subscription event (e.g., "send a welcome email every time this fires").

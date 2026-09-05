@@ -77,18 +77,22 @@ Create a markdown file called `DEBUG.md`: guide coding agent through a structure
 This is where you need to be the adult in the room. LLMs love to latch onto the first plausible explanation and run with it. It'll say things with **breathtaking confidence even when it's completely wrong**.
 
 - **Ask for evidence**, prompt it:
-  ```
+
+  ```text
   Is this a common issue? How many people reported it?
   ```
+
 - **Demand proof**, ask it:
-  ```
+
+  ```text
   Can you demonstrate that this is actually the root cause?
   ```
+
 - **Watch for fiction**, LLMs might **invent non‑existent limitations** and restructure the entire codebase around that false premise.
 
 If you catch it going down a rabbit hole, stop, revert to your last commit, and tell it:
 
-```
+```text
 This is not the problem. Try again.
 ```
 
@@ -127,5 +131,3 @@ This is the step that most people skip, including me and it's a huge mistake. On
 ## Systematic Debugging Skill
 
 Try to install [this](https://github.com/obra/superpowers/blob/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/systematic-debugging/SKILL.md) skill in your coding agent and use it. It formulates a lot of what I've described here, with extra emphasis on web searches and "The Iron Law" of proving the root cause.
-
-
