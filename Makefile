@@ -23,7 +23,7 @@ CHANGED := $(shell git diff --name-only --diff-filter=d $(BASE)...HEAD -- $(SERI
                    git diff --name-only --diff-filter=d -- $(SERIES_PATHSPECS) 2>/dev/null; \
                    git ls-files --others --exclude-standard -- $(SERIES_PATHSPECS) 2>/dev/null)
 
-.PHONY: help setup check validate validate-changed lint lint-changed links links-external index index-check diagrams schedule-dry clean
+.PHONY: help setup check validate validate-changed apply-series lint lint-changed links links-external index index-check diagrams schedule-dry clean
 
 help: ## Show this help
 	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -37,7 +37,11 @@ setup: ## Setup app on your local machine
 
 check: validate lint links ## Run every check CI runs, over the whole repo
 
-validate: ## Validate frontmatter and asset references
+apply-series: ## Auto-fill `series` frontmatter from directory for changed articles (mirrors publish.yml)
+	@if [ -z "$(CHANGED)" ]; then echo "[-] No changed articles."; \
+	else $(PYTHON) scripts/apply_series_from_dir.py $(sort $(CHANGED)); fi
+
+validate: apply-series ## Validate frontmatter and asset references
 	$(PYTHON) scripts/validate_articles.py --all
 
 lint: ## markdownlint every article
@@ -46,7 +50,7 @@ lint: ## markdownlint every article
 lint-changed: ## Fail only if changed articles ADD markdownlint errors (what CI gates on)
 	$(PYTHON) scripts/lint_ratchet.py --base $(BASE) --changed
 
-validate-changed: ## Validate only the articles changed vs $(BASE)
+validate-changed: apply-series ## Validate only the articles changed vs $(BASE)
 	@if [ -z "$(CHANGED)" ]; then echo "[-] No changed articles."; \
 	else $(PYTHON) scripts/validate_articles.py $(sort $(CHANGED)); fi
 
