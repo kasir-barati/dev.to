@@ -3,11 +3,11 @@ name: Schedule Publisher
 on:
   schedule:
     # Run every hour at minute 0
-    - cron: '0 * * * *'
+    - cron: "0 * * * *"
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Report what would publish without changing anything'
+        description: "Report what would publish without changing anything"
         type: boolean
         default: false
 
@@ -29,8 +29,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.x'
-          cache: 'pip'
+          python-version: "3.x"
+          cache: "pip"
           cache-dependency-path: scripts/requirements.txt
 
       - name: Install dependencies
@@ -54,8 +54,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Top-level articles only, matching what publish.yml syncs.
-          git add -- ':(glob)articles/*.md'
+          # Flat articles/*.md plus one-level-deep series directories, matching what publish.yml syncs (reserved dirs excluded: TIL, assets, DRAFT, JA).
+          git add -- ':(glob)articles/*.md' ':(glob)articles/*/*.md' \
+            ':(exclude,glob)articles/TIL/*.md' ':(exclude,glob)articles/assets/*.md' \
+            ':(exclude,glob)articles/DRAFT/*.md' ':(exclude,glob)articles/JA/*.md'
           if git diff --cached --quiet; then
             echo "No articles published."
             exit 0

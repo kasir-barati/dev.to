@@ -26,7 +26,7 @@ Source for the articles auto-published under [`kasir-barati/dev.to`](https://git
 
 ---
 
-Pushing to `main` triggers `.github/workflows/publish.yml`, which validates the changed `articles/*.md` and syncs them to dev.to in a single `@sinedied/devto-cli` batch. Set `published: true` in the frontmatter when an article is ready, or leave `published: false` with a future `date:` (UTC) and let the hourly `schedule.yml` cron flip it once the scheduled time arrives.
+Pushing to `main` triggers `.github/workflows/publish.yml`, which validates the changed articles (flat `articles/*.md` plus one-level-deep series directories) and syncs them to dev.to in a single `@sinedied/devto-cli` batch. Set `published: true` in the frontmatter when an article is ready, or leave `published: false` with a future `date:` (UTC) and let the hourly `schedule.yml` cron flip it once the scheduled time arrives.
 
 <table>
 <tr>

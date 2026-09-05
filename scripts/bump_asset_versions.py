@@ -25,29 +25,39 @@ import subprocess
 import sys
 from pathlib import Path
 
-ARTICLES_DIR = Path("articles")
+from series_dirs import discover_paths
 
+ARTICLES_DIR = Path("articles")
 MD_IMAGE_RE = re.compile(r"(!\[[^\]]*\]\(\s*)([^)\s]+)(\s+[\"'][^\"']*[\"'])?(\s*\))")
 HTML_IMAGE_RE = re.compile(r"(<img[^>]+src=[\"'])([^\"']+)([\"'])")
-COVER_IMAGE_RE = re.compile(r"^(cover_image:\s*[\"']?)([^\"'\s]+)([\"']?\s*)$", re.MULTILINE)
+COVER_IMAGE_RE = re.compile(
+    r"^(cover_image:\s*[\"']?)([^\"'\s]+)([\"']?\s*)$", re.MULTILINE
+)
 FRONTMATTER_RE = re.compile(r"^---\n.*?\n---\n", re.DOTALL)
-
-# Code block exclusion patterns
-FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+FENCE_RE = re.compile(r"```.*?```", re.DOTALL)  # Code block exclusion patterns
 INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
 CODE_RE = re.compile(f"(?:{FENCE_RE.pattern})|(?:{INLINE_CODE_RE.pattern})", re.DOTALL)
 
 
-def owning_article(asset_path: Path) -> Path | None:
+def owning_article(asset_path: Path, series_paths: list[str]) -> Path | None:
     """
-    articles/assets/<slug>/... -> articles/<slug>.md, if it exists.
+    articles/assets/<slug>/... -> articles/<slug>.md or articles/<series-dir>/<slug>.md, whichever exists. Assets are keyed by slug regardless of whether the article itself lives flat or under a series directory. `series_paths` is the full flat + one-level-series article list (computed once by the caller, since a slug collision across series dirs makes this ambiguous otherwise).
     """
     parts = asset_path.parts
     if len(parts) < 3 or parts[0] != "articles" or parts[1] != "assets":
         return None
     slug = parts[2]
-    article = ARTICLES_DIR / f"{slug}.md"
-    return article if article.is_file() else None
+    flat = ARTICLES_DIR / f"{slug}.md"
+    if flat.is_file():
+        return flat
+    matches = [p for p in series_paths if Path(p).name == f"{slug}.md"]
+    if len(matches) > 1:
+        print(
+            f"warning: slug {slug!r} matches multiple articles {matches}; not republishing {asset_path}",
+            file=sys.stderr,
+        )
+        return None
+    return Path(matches[0]) if matches else None
 
 
 def version_token(asset_path: Path) -> str:
@@ -146,13 +156,16 @@ def bump_references(text: str, asset_filename: str, token: str) -> tuple[str, bo
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("asset_paths", nargs="+", help="Changed asset file paths, repo-relative")
+    parser.add_argument(
+        "asset_paths", nargs="+", help="Changed asset file paths, repo-relative"
+    )
     args = parser.parse_args(argv)
+    series_paths, _too_deep = discover_paths(str(ARTICLES_DIR))
 
     touched: set[str] = set()
     for raw in args.asset_paths:
         asset_path = Path(raw)
-        article = owning_article(asset_path)
+        article = owning_article(asset_path, series_paths)
         if article is None:
             print(f"warning: no owning article for {asset_path}", file=sys.stderr)
             continue
@@ -160,7 +173,10 @@ def main(argv: list[str]) -> int:
         try:
             token = version_token(asset_path)
         except subprocess.CalledProcessError:
-            print(f"warning: cannot resolve {asset_path} at HEAD (deleted or invalid path); skipping", file=sys.stderr)
+            print(
+                f"warning: cannot resolve {asset_path} at HEAD (deleted or invalid path); skipping",
+                file=sys.stderr,
+            )
             continue
 
         text = article.read_text(encoding="utf-8")
@@ -169,7 +185,10 @@ def main(argv: list[str]) -> int:
             article.write_text(new_text, encoding="utf-8")
             touched.add(str(article))
         else:
-            print(f"warning: {article} has no reference to {asset_path.name}; not republished", file=sys.stderr)
+            print(
+                f"warning: {article} has no reference to {asset_path.name}; not republished",
+                file=sys.stderr,
+            )
 
     for path in sorted(touched):
         print(path)

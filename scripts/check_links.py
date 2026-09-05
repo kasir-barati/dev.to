@@ -15,13 +15,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import glob
-import os
 import re
 import sys
 import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
+
+from series_dirs import discover_paths
 
 ARTICLES_DIR = "articles"
 REPO = "kasir-barati/dev.to"
@@ -29,7 +29,6 @@ USER_AGENT = "devto-repo-link-check/1.0 (+https://github.com/kasir-barati/dev.to
 TIMEOUT = 20
 WORKERS = 8
 RETRIES = 2
-
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n?", re.DOTALL)
 INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
 # Markdown links, bare URLs and HTML hrefs all end up here.
@@ -69,11 +68,17 @@ def collect(paths, external):
             raw = handle.read()
         match = FRONTMATTER_RE.match(raw)
         offset = raw[: match.end()].count("\n") if match else 0
-        body = strip_code(raw[match.end():] if match else raw)
-        urls = [(m.group(0), m.start()) for m in URL_RE.finditer(body)]
+        body = strip_code(raw[match.end() :] if match else raw)
+        urls: list[tuple[str, int | None]] = [
+            (m.group(0), m.start()) for m in URL_RE.finditer(body)
+        ]
         # cover_image lives in frontmatter, not the body.
         if match:
-            for m in re.finditer(r"^cover_image:\s*['\"]?(https?://[^\s'\"]+)", match.group(1), re.MULTILINE):
+            for m in re.finditer(
+                r"^cover_image:\s*['\"]?(https?://[^\s'\"]+)",
+                match.group(1),
+                re.MULTILINE,
+            ):
                 urls.append((m.group(1), None))
         for url, index in urls:
             url = url.rstrip(TRAILING_PUNCT)
@@ -101,7 +106,9 @@ def probe(url):
     last = None
     for attempt in range(RETRIES + 1):
         for method in ("HEAD", "GET"):
-            request = urllib.request.Request(url, method=method, headers={"User-Agent": USER_AGENT})
+            request = urllib.request.Request(
+                url, method=method, headers={"User-Agent": USER_AGENT}
+            )
             try:
                 with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
                     return response.status, ""
@@ -120,14 +127,28 @@ def probe(url):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("paths", nargs="*")
-    parser.add_argument("--all", action="store_true", help=f"check every {ARTICLES_DIR}/*.md")
-    parser.add_argument("--external", action="store_true", help="also check third-party links")
+    parser.add_argument(
+        "--all", action="store_true", help=f"check every {ARTICLES_DIR}/*.md"
+    )
+    parser.add_argument(
+        "--external", action="store_true", help="also check third-party links"
+    )
     parser.add_argument("--format", choices=["text", "md"], default="text")
     args = parser.parse_args()
 
-    paths = sorted(glob.glob(os.path.join(ARTICLES_DIR, "*.md"))) if args.all else sorted(args.paths)
+    if args.all:
+        paths, too_deep = discover_paths(ARTICLES_DIR)
+        for path in too_deep:
+            print(
+                f"[!] {path}: nested more than one level deep under articles/; skipping.",
+                file=sys.stderr,
+            )
+    else:
+        paths = sorted(args.paths)
     paths = [p for p in paths if p.endswith(".md")]
     if not paths:
         print("[-] No articles to check.")
@@ -156,11 +177,15 @@ def main():
 
     if args.format == "md":
         print("### Link check\n")
-        print(f"Checked **{len(urls)}** unique link(s) across **{len(paths)}** article(s).\n")
+        print(
+            f"Checked **{len(urls)}** unique link(s) across **{len(paths)}** article(s).\n"
+        )
         if broken:
             print("#### Broken\n")
             for url, status, note in broken:
-                where = ", ".join(f"`{f}:{n}`" if n else f"`{f}`" for f, n in links[url])
+                where = ", ".join(
+                    f"`{f}:{n}`" if n else f"`{f}`" for f, n in links[url]
+                )
                 print(f"- `{status}` {url} ({where})")
             print()
         if unreachable:
@@ -180,7 +205,9 @@ def main():
             for path, line in links[url]:
                 where = f"{path}:{line}" if line else path
                 print(f"{where}: warning: unreachable {url} ({note})")
-        print(f"\n[-] {len(urls)} link(s): {len(broken)} broken, {len(unreachable)} unreachable.")
+        print(
+            f"\n[-] {len(urls)} link(s): {len(broken)} broken, {len(unreachable)} unreachable."
+        )
 
     return 1 if fatal else 0
 

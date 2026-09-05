@@ -136,3 +136,31 @@ orchestrator.
    `PROCESS.md`, `SELF_IMPROVEMENT.md`, `INDEX.md`) for the same claim
    stated inconsistently across files, since per-task review scope
    structurally cannot see cross-file consistency.
+9. When a task changes a documented rule or convention (e.g. "articles
+   live at `articles/<slug>.md`" becoming "... at
+   `articles/<series>/<slug>.md`"), the implementer must grep the whole
+   repo (docs and scripts, not just the files the plan named) for the old
+   pattern before calling the task done, and update or confirm each hit —
+   don't wait for `reviewer` or `self-improvement` to find stale doc
+   references as a surprise. A plan enumerating specific files to touch is
+   a starting point, not the full scope.
+10. Treat a plan step phrased as "confirm X needs no change" as a
+    hypothesis to actually test, not a formality to skip — run whatever
+    check the step itself proposes for falsifying it. Plans are written
+    ahead of implementation and can be wrong about exactly the things they
+    were most confident about; the step's own suggested test is often the
+    only thing that catches it (e.g. a glob pattern assumed to already
+    cover a new directory layout, which is only proven by running it).
+11. For any task that restructures where files live (moving articles,
+    renaming directories, changing path depth), run the full-corpus
+    validator (e.g. `validate_articles.py --all`) against the tree
+    *after* the move and read its output, don't rely on review of the
+    diff alone. Changing a file's directory depth can silently break its
+    own relative references (e.g. `./assets/...` needing to become
+    `../assets/...`) in a way that's invisible to a reviewer reading the
+    move's intent, but shows up immediately as a validator error.
+12. Multiple `reviewer` passes on the same diff are a normal, expected
+    outcome for larger tasks, not a sign the process failed — fix rounds
+    can introduce small new issues (a doc left stale, an edge case in a
+    just-added helper). Keep re-reviewing after fixes until a pass comes
+    back clean rather than treating one clean-ish round as sufficient.

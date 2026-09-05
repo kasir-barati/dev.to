@@ -3,7 +3,7 @@ name: Weekly audit
 on:
   schedule:
     # Mondays at 03:00 UTC
-    - cron: '0 3 * * 1'
+    - cron: "0 3 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DEVTO_CLI_VERSION: '1.4.0'
+  DEVTO_CLI_VERSION: "1.4.0"
 
 jobs:
   audit:
@@ -24,8 +24,8 @@ jobs:
 
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.x'
-          cache: 'pip'
+          python-version: "3.x"
+          cache: "pip"
           cache-dependency-path: scripts/requirements.txt
 
       - name: Install dependencies
@@ -52,6 +52,23 @@ jobs:
             exit 0
           fi
           npm install -g "@sinedied/devto-cli@${DEVTO_CLI_VERSION}"
+
+          # Enumerate files ourselves (flat + one-level-deep series dirs, reserved dirs excluded) rather than handing devto-cli a raw glob whose '*'
+          # semantics we don't control.
+          series_pathspecs=(
+            ':(glob)articles/*.md'
+            ':(glob)articles/*/*.md'
+            ':(exclude,glob)articles/TIL/*.md'
+            ':(exclude,glob)articles/assets/*.md'
+            ':(exclude,glob)articles/DRAFT/*.md'
+            ':(exclude,glob)articles/JA/*.md'
+          )
+          mapfile -d '' -t files < <(git ls-files -z -- "${series_pathspecs[@]}")
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "::error::No articles matched the series pathspecs; drift check would silently check nothing."
+            exit 1
+          fi
+
           {
             echo "### Drift against dev.to"
             echo
@@ -59,7 +76,7 @@ jobs:
             echo
             echo '```text'
             # --dry-run reports what would change without writing to dev.to.
-            dev push 'articles/*.md' -r "${GITHUB_REPOSITORY}" -b "${GITHUB_REF_NAME}" --dry-run 2>&1 | tail -n 200
+            dev push "${files[@]}" -r "${GITHUB_REPOSITORY}" -b "${GITHUB_REF_NAME}" --dry-run 2>&1 | tail -n 200
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 

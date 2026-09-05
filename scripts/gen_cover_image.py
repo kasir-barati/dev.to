@@ -1,14 +1,14 @@
 import argparse
 from pathlib import Path
-from typing import Tuple
+
 from PIL import Image
 
 
 def create_devto_cover(
     input_path: Path,
     output_path: Path,
-    target_size: Tuple[int, int] = (1000, 420),
-    bg_color: Tuple[int, int, int] = (0, 0, 0),
+    target_size: tuple[int, int] = (1000, 420),
+    bg_color: tuple[int, int, int] = (0, 0, 0),
 ) -> None:
     """
     Resizes an image to fit the dev.to cover image dimensions, padding with a background color.

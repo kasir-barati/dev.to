@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'articles/**/*.md'
-      - 'articles/assets/**'
+      - "articles/**/*.md"
+      - "articles/assets/**"
   workflow_dispatch:
     inputs:
       scope:
-        description: 'Which articles to push'
+        description: "Which articles to push"
         type: choice
         options:
           - changed
@@ -24,7 +24,7 @@ concurrency:
 
 env:
   # Pinned: an unpinned global install would silently pick up whatever the registry serves at build time.
-  DEVTO_CLI_VERSION: '1.4.0'
+  DEVTO_CLI_VERSION: "1.4.0"
   ARTICLE_LIST: articles.nul
 
 jobs:
@@ -40,8 +40,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.x'
-          cache: 'pip'
+          python-version: "3.x"
+          cache: "pip"
           cache-dependency-path: scripts/requirements.txt
 
       - name: Install dependencies
@@ -60,17 +60,25 @@ jobs:
           set -euo pipefail
           list="${RUNNER_TEMP}/${ARTICLE_LIST}"
 
-          # ':(glob)' stops '*' from matching '/', so this stays top-level only.
-          # articles/TIL/ and any other subdirectory is intentionally not published.
+          # Flat articles/*.md plus one-level-deep series directories (articles/<dir>/*.md), excluding the reserved dirs that already have distinct meaning (TIL notes, per-article assets, gitignored drafts/translations). ':(glob)' stops '*' from matching '/', so combined with ':(exclude,glob)' this stays exactly one level deep.
+          series_pathspecs=(
+            ':(glob)articles/*.md'
+            ':(glob)articles/*/*.md'
+            ':(exclude,glob)articles/TIL/*.md'
+            ':(exclude,glob)articles/assets/*.md'
+            ':(exclude,glob)articles/DRAFT/*.md'
+            ':(exclude,glob)articles/JA/*.md'
+          )
+
           if [ "$EVENT" = "workflow_dispatch" ] && [ "$SCOPE" = "all" ]; then
-            git ls-files -z -- ':(glob)articles/*.md' > "$list"
+            git ls-files -z -- "${series_pathspecs[@]}" > "$list"
           else
             base="$BEFORE"
             if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
               # First push on a branch, or a force-push rewrote history.
               base="$(git rev-parse "${AFTER}^" 2>/dev/null || echo "$AFTER")"
             fi
-            git diff -z --name-only --diff-filter=d "$base" "$AFTER" -- ':(glob)articles/*.md' > "$list"
+            git diff -z --name-only --diff-filter=d "$base" "$AFTER" -- "${series_pathspecs[@]}" > "$list"
 
             # Asset-only changes don't touch the article's markdown, but the article still needs to be re-pushed so devto-cli's diff check (full file content equality) picks up the cache-busted image reference bump_asset_versions.py is about to write. See https://github.com/kasir-barati/dev.to/issues/2.
             assets_list="${RUNNER_TEMP}/articles-assets.nul"
@@ -109,6 +117,13 @@ jobs:
             printf '  %s\n' "${files[@]}"
           fi
 
+      - name: Apply series from directory
+        if: steps.collect.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          mapfile -d '' -t files < "${RUNNER_TEMP}/${ARTICLE_LIST}"
+          python scripts/apply_series_from_dir.py "${files[@]}"
+
       - name: Validate articles
         if: steps.collect.outputs.count != '0'
         run: |
@@ -139,7 +154,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add -- ':(glob)articles/*.md'
+          git add -- ':(glob)articles/*.md' ':(glob)articles/*/*.md' \
+            ':(exclude,glob)articles/TIL/*.md' ':(exclude,glob)articles/assets/*.md' \
+            ':(exclude,glob)articles/DRAFT/*.md' ':(exclude,glob)articles/JA/*.md'
           if git diff --cached --quiet; then
             echo "No frontmatter changes to commit."
             exit 0

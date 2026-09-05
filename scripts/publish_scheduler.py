@@ -1,11 +1,11 @@
 import argparse
-import os
-import glob
-import re
 import datetime
+import re
+from datetime import timezone
+
 import yaml
 from dateutil import parser
-from datetime import timezone
+from series_dirs import discover_paths
 
 # Configuration
 ARTICLES_DIR = "articles"
@@ -17,12 +17,15 @@ def main(dry_run=False):
     mode = " (dry run, no files will be modified)" if dry_run else ""
     print(f"[-] Checking for scheduled articles at {now.isoformat()}...{mode}")
 
-    # Find all markdown files in the articles directory
-    search_pattern = os.path.join(ARTICLES_DIR, "*.md")
-    files = glob.glob(search_pattern)
+    # Find all markdown files in the articles directory (flat + one-level series dirs)
+    files, too_deep = discover_paths(ARTICLES_DIR)
+    for path in too_deep:
+        print(
+            f"[!] {path}: nested more than one level deep under {ARTICLES_DIR}/; skipping."
+        )
 
     if not files:
-        print(f"[!] No articles found in {search_pattern}")
+        print(f"[!] No articles found in {ARTICLES_DIR}/")
         return
 
     updated_count = 0
@@ -118,7 +121,9 @@ def main(dry_run=False):
     if updated_count == 0:
         print("[-] No articles need publishing.")
     elif dry_run:
-        print(f"[-] {updated_count} article(s) would be published. Nothing was written.")
+        print(
+            f"[-] {updated_count} article(s) would be published. Nothing was written."
+        )
     else:
         print(f"[-] Successfully published {updated_count} article(s).")
 

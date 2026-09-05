@@ -13,7 +13,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import glob
 import json
 import os
 import re
@@ -23,6 +22,7 @@ import urllib.request
 from collections import defaultdict
 
 import yaml
+from series_dirs import discover_paths
 
 ARTICLES_DIR = "articles"
 INDEX_FILE = "INDEX.md"
@@ -30,13 +30,16 @@ README_FILE = "README.md"
 USERNAME = "kanywst"
 API = "https://dev.to/api"
 USER_AGENT = "devto-repo-index/1.0 (+https://github.com/kasir-barati/dev.to)"
-
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n?", re.DOTALL)
-STATS_BLOCK_RE = re.compile(r"(<!-- stats:start -->)(.*?)(<!-- stats:end -->)", re.DOTALL)
+STATS_BLOCK_RE = re.compile(
+    r"(<!-- stats:start -->)(.*?)(<!-- stats:end -->)", re.DOTALL
+)
 
 
 def fetch(url, headers=None):
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
+    request = urllib.request.Request(
+        url, headers={"User-Agent": USER_AGENT, **(headers or {})}
+    )
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)
 
@@ -67,7 +70,9 @@ def fetch_remote():
         try:
             page = 1
             while True:
-                batch = fetch(f"{API}/articles/me/all?per_page=1000&page={page}", {"api-key": key})
+                batch = fetch(
+                    f"{API}/articles/me/all?per_page=1000&page={page}", {"api-key": key}
+                )
                 if not batch:
                     break
                 for article in batch:
@@ -77,14 +82,18 @@ def fetch_remote():
                     break
                 page += 1
         except urllib.error.HTTPError as exc:
-            print(f"[!] Could not fetch private stats ({exc.code}); continuing without view counts.", file=sys.stderr)
+            print(
+                f"[!] Could not fetch private stats ({exc.code}); continuing without view counts.",
+                file=sys.stderr,
+            )
 
     return remote
 
 
 def load_articles():
+    paths, too_deep = discover_paths(ARTICLES_DIR)
     articles = []
-    for path in sorted(glob.glob(os.path.join(ARTICLES_DIR, "*.md"))):
+    for path in paths:
         with open(path, encoding="utf-8") as handle:
             match = FRONTMATTER_RE.match(handle.read())
         if not match:
@@ -95,7 +104,7 @@ def load_articles():
             continue
         if isinstance(fm, dict) and fm.get("title"):
             articles.append((path, fm))
-    return articles
+    return articles, too_deep
 
 
 def escape(text):
@@ -132,7 +141,9 @@ def build_index(articles, remote):
     by_series = defaultdict(list)
     standalone = []
     for path, fm in articles:
-        (by_series[str(fm["series"])] if fm.get("series") else standalone).append((path, fm))
+        (by_series[str(fm["series"])] if fm.get("series") else standalone).append(
+            (path, fm)
+        )
 
     published = sum(1 for _p, fm in articles if fm.get("published") is True)
     lines = [
@@ -140,8 +151,10 @@ def build_index(articles, remote):
         "",
         "# Article index",
         "",
-        f"{len(articles)} article(s) in this repository, {published} published to "
-        f"[dev.to/{USERNAME}](https://dev.to/{USERNAME}), across {len(by_series)} series.",
+        (
+            f"{len(articles)} article(s) in this repository, {published} published to "
+            f"[dev.to/{USERNAME}](https://dev.to/{USERNAME}), across {len(by_series)} series."
+        ),
         "",
         "## Series",
         "",
@@ -155,14 +168,18 @@ def build_index(articles, remote):
 
     if standalone:
         lines += ["## Standalone", "", HEADER]
-        lines += [row(path, fm, remote) for path, fm in sorted(standalone, key=lambda e: e[0])]
+        lines += [
+            row(path, fm, remote) for path, fm in sorted(standalone, key=lambda e: e[0])
+        ]
         lines.append("")
 
     return "\n".join(lines)
 
 
 def build_stats(articles, remote):
-    live = [(fm["title"], remote[fm["id"]]) for _p, fm in articles if fm.get("id") in remote]
+    live = [
+        (fm["title"], remote[fm["id"]]) for _p, fm in articles if fm.get("id") in remote
+    ]
     reactions = sum(item["reactions"] for _t, item in live)
     comments = sum(item["comments"] for _t, item in live)
     drafts = sum(1 for _p, fm in articles if fm.get("published") is not True)
@@ -196,22 +213,33 @@ def write(path, content, check):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--check", action="store_true", help="report drift instead of writing")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--check", action="store_true", help="report drift instead of writing"
+    )
     args = parser.parse_args()
 
-    articles = load_articles()
+    articles, too_deep = load_articles()
     if not articles:
         print("[!] No articles found.")
+        return 1
+    if too_deep:
+        print(
+            f"[!] {len(too_deep)} article(s) nested too deep; fix before regenerating {INDEX_FILE}: {too_deep}"
+        )
         return 1
     remote = fetch_remote()
     print(f"[-] {len(articles)} local article(s), {len(remote)} remote article(s).")
 
-    stale = write(INDEX_FILE, build_index(articles, remote) , args.check)
+    stale = write(INDEX_FILE, build_index(articles, remote), args.check)
 
     readme = open(README_FILE, encoding="utf-8").read()
     if STATS_BLOCK_RE.search(readme):
-        updated = STATS_BLOCK_RE.sub(lambda m: m.group(1) + build_stats(articles, remote) + m.group(3), readme)
+        updated = STATS_BLOCK_RE.sub(
+            lambda m: m.group(1) + build_stats(articles, remote) + m.group(3), readme
+        )
         stale = write(README_FILE, updated, args.check) or stale
     else:
         print(f"[!] {README_FILE} has no <!-- stats:start --> block; skipping.")

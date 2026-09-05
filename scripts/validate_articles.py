@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Validate article frontmatter and asset references before they reach dev.to.
+"""
+Validate article frontmatter and asset references before they reach dev.to.
 
 Errors block a push (exit 1). Warnings are reported but never block, so legacy
 content debt does not wedge CI.
@@ -14,13 +15,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import glob
 import os
 import re
 import sys
 from collections import defaultdict
+from typing import cast
 
 import yaml
+from series_dirs import classify, discover_paths, sanitize_series_name
 
 ARTICLES_DIR = "articles"
 REPO = "kasir-barati/dev.to"
@@ -92,7 +94,8 @@ def load(path):
     if not isinstance(data, dict):
         return None, raw, 0, "frontmatter is not a mapping"
     offset = raw[: match.end()].count("\n")
-    return data, raw[match.end():], offset, None
+
+    return data, raw[match.end() :], offset, None
 
 
 def check_frontmatter(path, fm, findings):
@@ -105,7 +108,9 @@ def check_frontmatter(path, fm, findings):
     if not tags:
         findings.append(Finding(WARNING, path, "frontmatter has no `tags`"))
     elif not isinstance(tags, list):
-        findings.append(Finding(ERROR, path, f"`tags` must be a list, got {type(tags).__name__}"))
+        findings.append(
+            Finding(ERROR, path, f"`tags` must be a list, got {type(tags).__name__}")
+        )
     else:
         if len(tags) > MAX_TAGS:
             findings.append(
@@ -118,7 +123,11 @@ def check_frontmatter(path, fm, findings):
         for tag in tags:
             if not TAG_RE.match(str(tag)):
                 findings.append(
-                    Finding(ERROR, path, f"tag {tag!r} must be lowercase alphanumeric with no separators")
+                    Finding(
+                        ERROR,
+                        path,
+                        f"tag {tag!r} must be lowercase alphanumeric with no separators",
+                    )
                 )
 
     if not fm.get("description"):
@@ -127,7 +136,48 @@ def check_frontmatter(path, fm, findings):
 
     series = fm.get("series")
     if isinstance(series, str) and series != series.strip():
-        findings.append(Finding(ERROR, path, f"`series` has surrounding whitespace: {series!r}"))
+        findings.append(
+            Finding(ERROR, path, f"`series` has surrounding whitespace: {series!r}")
+        )
+
+    check_series_dir(path, fm, findings)
+
+
+def check_series_dir(path, fm, findings):
+    kind, dirname = classify(path, ARTICLES_DIR)
+    series = fm.get("series")
+
+    if kind == "flat":
+        if series:
+            findings.append(
+                Finding(
+                    ERROR,
+                    path,
+                    f"top-level article must NOT have a `series` key (found {series!r})",
+                )
+            )
+        return
+
+    if kind in ("reserved", "too_deep", "outside"):
+        return
+
+    expected = sanitize_series_name(cast(str, dirname))
+    if not series:
+        findings.append(
+            Finding(
+                ERROR,
+                path,
+                f"article under articles/{dirname}/ is missing `series: {expected}`",
+            )
+        )
+    elif str(series) != expected:
+        findings.append(
+            Finding(
+                ERROR,
+                path,
+                f"`series: {series}` does not match its directory: expected {expected!r} for articles/{dirname}/",
+            )
+        )
 
 
 def check_cover(path, fm, findings):
@@ -137,19 +187,29 @@ def check_cover(path, fm, findings):
         return
     if not str(cover).startswith("http"):
         findings.append(
-            Finding(ERROR, path, "`cover_image` must be an absolute raw URL; devto-cli does not rewrite it")
+            Finding(
+                ERROR,
+                path,
+                "`cover_image` must be an absolute raw URL; devto-cli does not rewrite it",
+            )
         )
         return
     if REPO not in cover:
-        findings.append(Finding(ERROR, path, f"`cover_image` must point at {REPO}: {cover}"))
+        findings.append(
+            Finding(ERROR, path, f"`cover_image` must point at {REPO}: {cover}")
+        )
         return
     match = re.search(r"/(?:refs/heads/)?[^/]+/(articles/.+)$", cover)
     if not match:
-        findings.append(Finding(ERROR, path, f"cannot parse `cover_image` path: {cover}"))
+        findings.append(
+            Finding(ERROR, path, f"cannot parse `cover_image` path: {cover}")
+        )
         return
     local = match.group(1).split("?")[0]
     if not os.path.exists(local):
-        findings.append(Finding(ERROR, path, f"`cover_image` points at a missing file: {local}"))
+        findings.append(
+            Finding(ERROR, path, f"`cover_image` points at a missing file: {local}")
+        )
 
 
 def check_images(path, body, offset, findings):
@@ -159,13 +219,29 @@ def check_images(path, body, offset, findings):
         line = offset + body[: match.start()].count("\n") + 1
         if url.startswith("http"):
             if url.split("?")[0].lower().endswith(".svg"):
-                findings.append(Finding(ERROR, path, f"SVG image: dev.to's CDN corrupts SVG, use PNG ({url})", line))
+                findings.append(
+                    Finding(
+                        ERROR,
+                        path,
+                        f"SVG image: dev.to's CDN corrupts SVG, use PNG ({url})",
+                        line,
+                    )
+                )
             continue
         if url.split("?")[0].lower().endswith(".svg"):
-            findings.append(Finding(ERROR, path, f"SVG image: dev.to's CDN corrupts SVG, use PNG ({url})", line))
+            findings.append(
+                Finding(
+                    ERROR,
+                    path,
+                    f"SVG image: dev.to's CDN corrupts SVG, use PNG ({url})",
+                    line,
+                )
+            )
         target = os.path.normpath(os.path.join(base, url.split("?")[0]))
         if not os.path.exists(target):
-            findings.append(Finding(ERROR, path, f"image does not exist: {target}", line))
+            findings.append(
+                Finding(ERROR, path, f"image does not exist: {target}", line)
+            )
 
     for match in HTML_IMAGE_RE.finditer(body):
         url = match.group(1)
@@ -186,14 +262,33 @@ def check_images(path, body, offset, findings):
 def check_body(path, body, offset, raw_body, findings):
     # Only this repo's own assets are constrained; articles legitimately link to
     # raw files in other repos (the author's projects, upstream OSS).
-    for match in re.finditer(r"raw\.githubusercontent\.com/([\w.-]+/[\w.-]+)/\S*?articles/assets/", body):
+    for match in re.finditer(
+        r"raw\.githubusercontent\.com/([\w.-]+/[\w.-]+)/\S*?articles/assets/", body
+    ):
         if match.group(1) != REPO:
             line = offset + body[: match.start()].count("\n") + 1
-            findings.append(Finding(ERROR, path, f"asset URL points at {match.group(1)}, expected {REPO}", line))
+            findings.append(
+                Finding(
+                    ERROR,
+                    path,
+                    f"asset URL points at {match.group(1)}, expected {REPO}",
+                    line,
+                )
+            )
     if "```mermaid" in raw_body:
-        findings.append(Finding(WARNING, path, "uses Mermaid; new diagrams should be D2 (see CLAUDE.md)"))
+        findings.append(
+            Finding(
+                WARNING, path, "uses Mermaid; new diagrams should be D2 (see CLAUDE.md)"
+            )
+        )
     if "—" in body:
-        findings.append(Finding(WARNING, path, f"contains {body.count(chr(0x2014))} em dash character(s)"))
+        findings.append(
+            Finding(
+                WARNING,
+                path,
+                f"contains {body.count(chr(0x2014))} em dash character(s)",
+            )
+        )
 
 
 def check_corpus(articles, findings):
@@ -211,11 +306,23 @@ def check_corpus(articles, findings):
     for article_id, paths in by_id.items():
         if len(paths) > 1:
             for path in paths:
-                findings.append(Finding(ERROR, path, f"dev.to id {article_id} is also claimed by {paths}"))
+                findings.append(
+                    Finding(
+                        ERROR,
+                        path,
+                        f"dev.to id {article_id} is also claimed by {paths}",
+                    )
+                )
 
     for name, paths in series.items():
         if len(paths) == 1:
-            findings.append(Finding(WARNING, paths[0], f"series {name!r} has a single article; dev.to renders '1/1'"))
+            findings.append(
+                Finding(
+                    WARNING,
+                    paths[0],
+                    f"series {name!r} has a single article; dev.to renders '1/1'",
+                )
+            )
 
     # Near-duplicate series names end up as two separate sidebars on dev.to.
     normalized = defaultdict(list)
@@ -223,24 +330,56 @@ def check_corpus(articles, findings):
         normalized[re.sub(r"[^a-z0-9]", "", name.lower())].append(name)
     for variants in normalized.values():
         if len(variants) > 1:
-            findings.append(Finding(WARNING, ARTICLES_DIR, f"series names differ only by case/punctuation: {variants}"))
+            findings.append(
+                Finding(
+                    WARNING,
+                    ARTICLES_DIR,
+                    f"series names differ only by case/punctuation: {variants}",
+                )
+            )
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("paths", nargs="*", help="article paths; defaults to nothing unless --all is given")
-    parser.add_argument("--all", action="store_true", help=f"check every {ARTICLES_DIR}/*.md")
-    parser.add_argument("--strict", action="store_true", help="treat warnings as errors")
-    parser.add_argument("--format", choices=["text", "md"], default="text", help="output format")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help="article paths; defaults to nothing unless --all is given",
+    )
+    parser.add_argument(
+        "--all", action="store_true", help=f"check every {ARTICLES_DIR}/*.md"
+    )
+    parser.add_argument(
+        "--strict", action="store_true", help="treat warnings as errors"
+    )
+    parser.add_argument(
+        "--format", choices=["text", "md"], default="text", help="output format"
+    )
     args = parser.parse_args()
 
-    paths = sorted(glob.glob(os.path.join(ARTICLES_DIR, "*.md"))) if args.all else sorted(args.paths)
+    findings = []
+    too_deep = []
+    if args.all:
+        paths, too_deep = discover_paths(ARTICLES_DIR)
+    else:
+        paths = sorted(args.paths)
+        too_deep = [p for p in paths if classify(p, ARTICLES_DIR)[0] == "too_deep"]
+        paths = [p for p in paths if p not in too_deep]
     paths = [p for p in paths if p.endswith(".md")]
-    if not paths:
+    for path in too_deep:
+        findings.append(
+            Finding(
+                ERROR,
+                path,
+                "nested more than one level deep under articles/; not a valid series article",
+            )
+        )
+    if not paths and not too_deep:
         print("[-] No articles to validate.")
         return 0
 
-    findings = []
     articles = []
     for path in paths:
         fm, body, offset, error = load(path)
@@ -264,19 +403,25 @@ def main():
 
     if args.format == "md":
         print("### Article validation\n")
-        print(f"Checked **{len(paths)}** article(s): **{len(errors)}** error(s), **{len(warnings)}** warning(s).\n")
+        print(
+            f"Checked **{len(paths)}** article(s): **{len(errors)}** error(s), **{len(warnings)}** warning(s).\n"
+        )
         for group, title in ((errors, "Errors"), (warnings, "Warnings")):
             if not group:
                 continue
             print(f"#### {title}\n")
             for finding in group:
-                where = f"{finding.path}:{finding.line}" if finding.line else finding.path
+                where = (
+                    f"{finding.path}:{finding.line}" if finding.line else finding.path
+                )
                 print(f"- `{where}` {finding.message}")
             print()
     else:
         for finding in errors + warnings:
             print(finding)
-        print(f"\n[-] {len(paths)} article(s): {len(errors)} error(s), {len(warnings)} warning(s).")
+        print(
+            f"\n[-] {len(paths)} article(s): {len(errors)} error(s), {len(warnings)} warning(s)."
+        )
 
     if errors:
         return 1

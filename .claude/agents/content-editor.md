@@ -18,14 +18,23 @@ Hard rules (from AGENTS.md):
 - `cover_image`: absolute `raw.githubusercontent.com` URL (generate via
   `python scripts/gen_cover_image.py`), never a relative path — devto-cli
   does not rewrite it.
-- `series`: must match an existing series name exactly if you have one. Otherwise dev.to creates a second series.
-- Assets for an article live under `articles/assets/<slug>/` and are
-  referenced from the article body with relative `./assets/<slug>/...`
-  paths — never write an absolute URL for an inline image yourself,
-  devto-cli rewrites relative paths at push time.
+- `series`: never hand-type it. A flat `articles/<slug>.md` must have no
+  `series` key; put the article at `articles/<series-slug>/<slug>.md`
+  instead (kebab-case dir) and `scripts/apply_series_from_dir.py` derives
+  and writes `series` from the directory name.
+- Assets for an article always live under `articles/assets/<slug>/`, never
+  under a series directory. Reference them relative to the article's own
+  location: `./assets/<slug>/...` from a flat article, `../assets/<slug>/...`
+  from a one-level-deep series article — never write an absolute URL for an
+  inline image yourself, devto-cli rewrites relative paths at push time.
+  This only applies to markdown image syntax (`![]()`) — a plain `[]()` link
+  or `<img src>` pointing at an asset is never rewritten and needs an
+  absolute `raw.githubusercontent.com` URL written by hand instead.
 - One paragraph = one unwrapped line (house style — no hand-wrapping).
-- Only `articles/*.md` (top-level) is synced to dev.to. `articles/TIL/`,
-  `articles/DRAFT/`, `articles/JA/` are not.
+- Flat `articles/*.md` and one-level-deep series articles
+  (`articles/<series-slug>/*.md`) are synced to dev.to. `articles/TIL/`,
+  `articles/assets/`, `articles/DRAFT/`, `articles/JA/` are not, and
+  anything nested more than one level deep is a validation error.
 
 Scope boundary: you touch `articles/**` and `templates/**` only. If a task
 needs a change to `.github/workflows/**` or `scripts/**`, stop and say so —

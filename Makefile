@@ -5,13 +5,23 @@ PYTHON  ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo pyth
 # Repo-local ruleset wins so `make lint` and CI agree.
 MDCONFIG ?= $(shell [ -f .markdownlint-cli2.jsonc ] && echo .markdownlint-cli2.jsonc || echo $(HOME)/.markdownlint-cli2.jsonc)
 LINT    := npx --yes markdownlint-cli2 --config $(MDCONFIG)
-ARTICLES := articles/*.md
+# markdownlint-cli2 resolves globs itself via globby, which supports '!'
+# negation — every pattern must stay quoted so the shell doesn't pre-expand
+# the positive globs (which would defeat the negative ones).
+ARTICLES := "articles/*.md" "articles/*/*.md" "!articles/TIL/*.md" "!articles/assets/*.md" "!articles/DRAFT/*.md" "!articles/JA/*.md"
 BASE     ?= origin/main
 
+# Flat articles/*.md plus one-level-deep series directories (articles/<dir>/*.md),
+# excluding the reserved dirs that already have distinct meaning (TIL notes,
+# per-article assets, gitignored drafts/translations).
+SERIES_PATHSPECS := ':(glob)articles/*.md' ':(glob)articles/*/*.md' \
+                     ':(exclude,glob)articles/TIL/*.md' ':(exclude,glob)articles/assets/*.md' \
+                     ':(exclude,glob)articles/DRAFT/*.md' ':(exclude,glob)articles/JA/*.md'
+
 # Articles touched relative to $(BASE), which is what CI gates on.
-CHANGED := $(shell git diff --name-only --diff-filter=d $(BASE)...HEAD -- 'articles/*.md' 2>/dev/null; \
-                   git diff --name-only --diff-filter=d -- 'articles/*.md' 2>/dev/null; \
-                   git ls-files --others --exclude-standard -- 'articles/*.md' 2>/dev/null)
+CHANGED := $(shell git diff --name-only --diff-filter=d $(BASE)...HEAD -- $(SERIES_PATHSPECS) 2>/dev/null; \
+                   git diff --name-only --diff-filter=d -- $(SERIES_PATHSPECS) 2>/dev/null; \
+                   git ls-files --others --exclude-standard -- $(SERIES_PATHSPECS) 2>/dev/null)
 
 .PHONY: help setup check validate validate-changed lint lint-changed links links-external index index-check diagrams schedule-dry clean
 
@@ -31,7 +41,7 @@ validate: ## Validate frontmatter and asset references
 	$(PYTHON) scripts/validate_articles.py --all
 
 lint: ## markdownlint every article
-	$(LINT) "$(ARTICLES)"
+	$(LINT) $(ARTICLES)
 
 lint-changed: ## Fail only if changed articles ADD markdownlint errors (what CI gates on)
 	$(PYTHON) scripts/lint_ratchet.py --base $(BASE) --changed

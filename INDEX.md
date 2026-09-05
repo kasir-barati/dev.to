@@ -10,18 +10,18 @@
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
-| Coding Agents & Workflows | `llm`, `programming`, `productivity`, `workflow` | pending |  | [src](./articles/coding-agent-and-workflows.md) |
-| Debugging with Coding Agents -- A Systematic Strategy That Actually Works | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/debugging-with-coding-agents-systematic.md) |
-| Subagenting | `llm`, `programming`, `productivity` | pending |  | [src](./articles/subagenting.md) |
-| Understanding MCP, Skills, and Plugins | `ai`, `llm`, `vibeengineering` | pending |  | [src](./articles/understanding-mcp-skills-and-plugins-in-coding-agents.md) |
-| Vibe Engineering -- Responsible use of LLMs | `ai`, `llm`, `productivity` | pending |  | [src](./articles/vibe-engineering-resposible-use-of-llms.md) |
+| Coding Agents & Workflows | `llm`, `programming`, `productivity`, `workflow` | pending |  | [src](./articles/agentic-programming/coding-agent-and-workflows.md) |
+| Debugging with Coding Agents -- A Systematic Strategy That Actually Works | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/agentic-programming/debugging-with-coding-agents-systematic.md) |
+| Subagenting | `llm`, `programming`, `productivity` | pending |  | [src](./articles/agentic-programming/subagenting.md) |
+| Understanding MCP, Skills, and Plugins | `ai`, `llm`, `vibeengineering` | pending |  | [src](./articles/agentic-programming/understanding-mcp-skills-and-plugins-in-coding-agents.md) |
+| Vibe Engineering -- Responsible use of LLMs | `ai`, `llm`, `productivity` | pending |  | [src](./articles/agentic-programming/vibe-engineering-resposible-use-of-llms.md) |
 
 ### System Design (2)
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
-| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/rabbitmq-consumer-as-a-separate-worker-service.md) |
-| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/the-pipeline-pattern.md) |
+| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/system-design/rabbitmq-consumer-as-a-separate-worker-service.md) |
+| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/system-design/the-pipeline-pattern.md) |
 
 ## Standalone
 

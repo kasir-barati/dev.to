@@ -14,7 +14,7 @@ date: '2026-08-23T16:36:48Z'
 
 You might have heard of skills, plugins, and MCPs. But if you have not I guess if I had to put explain it in 10 seconds I would say:
 
-![Plugins, skills, and MCPs in 10 seconds](./assets/understanding-mcp-skills-and-plugins-in-coding-agents/plugins-skills-mcps-in-10-seconds.png)
+![Plugins, skills, and MCPs in 10 seconds](../assets/understanding-mcp-skills-and-plugins-in-coding-agents/plugins-skills-mcps-in-10-seconds.png)
 
 I would also like to just remind you that the real innovation was when LLMs started to move from being soly a token predictor to something that feels like agentic AI. In other words instead of generating content LLMs now can take actions such as surfing the web or creating files/directories.
 
@@ -69,7 +69,7 @@ To summarize MCP took of because it was and is:
 
 On a related note it is good to know MCP servers can run in two different transport modes:
 
-![MCP transport modes](./assets/understanding-mcp-skills-and-plugins-in-coding-agents/mcp-transport-mode.png)
+![MCP transport modes](../assets/understanding-mcp-skills-and-plugins-in-coding-agents/mcp-transport-mode.png)
 
 ### Finding MCP Servers
 
@@ -95,7 +95,7 @@ For example the skill we will have after installing Context7 as a skill would lo
 
 Skills might sound fancy. But they are lightweight, and powerful only thanks to:
 
-![metadata, instructions, code and resources](./assets/understanding-mcp-skills-and-plugins-in-coding-agents/lightweight-powerful-context-aware-skills.png)
+![metadata, instructions, code and resources](../assets/understanding-mcp-skills-and-plugins-in-coding-agents/lightweight-powerful-context-aware-skills.png)
 
 In Claude they are structured like this:
 
@@ -135,7 +135,7 @@ Basically we package MCP, skills, commands, and agents together in plugins. A bu
 
 You can find and [see plugins we have in Claude](https://github.com/anthropics/claude-plugins-official). For Claude you can also install and check what you have by running `/plugin` when you opened claude:
 
-![Claude plugin overview](./assets/understanding-mcp-skills-and-plugins-in-coding-agents/claude-plugin.png)
+![Claude plugin overview](../assets/understanding-mcp-skills-and-plugins-in-coding-agents/claude-plugin.png)
 
 BTW plugins as of now (2026.08.23) are categorized into two category:
 

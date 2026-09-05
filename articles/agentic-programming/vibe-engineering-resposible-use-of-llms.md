@@ -26,7 +26,7 @@ And I wholeheartedly agree with him. It's about being **highly productive**, **h
 
 You are responsible for what LLMs generate:
 
-[You are responsible for what LLMs generate](./assets/vibe-engineering-resposible-use-of-llms/claude-security-note.png)
+![You are responsible for what LLMs generate](../assets/vibe-engineering-resposible-use-of-llms/claude-security-note.png)
 
 *Happy engineering.* 🚀
 

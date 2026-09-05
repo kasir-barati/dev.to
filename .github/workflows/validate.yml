@@ -3,14 +3,14 @@ name: Validate articles
 on:
   pull_request:
     paths:
-      - 'articles/**/*.md'
-      - 'scripts/**'
-      - '.github/workflows/validate.yml'
+      - "articles/**/*.md"
+      - "scripts/**"
+      - ".github/workflows/validate.yml"
   push:
     branches:
       - main
     paths:
-      - 'articles/**/*.md'
+      - "articles/**/*.md"
   workflow_dispatch:
 
 permissions:
@@ -30,8 +30,8 @@ jobs:
 
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.x'
-          cache: 'pip'
+          python-version: "3.x"
+          cache: "pip"
           cache-dependency-path: scripts/requirements.txt
 
       - name: Install dependencies
@@ -63,7 +63,17 @@ jobs:
         run: |
           set -euo pipefail
           list="${RUNNER_TEMP}/changed.nul"
-          git diff -z --name-only --diff-filter=d "$BASE" HEAD -- ':(glob)articles/*.md' > "$list"
+
+          # Flat articles/*.md plus one-level-deep series directories (articles/<dir>/*.md), excluding the reserved dirs that already have distinct meaning (TIL notes, per-article assets, gitignored drafts/translations).
+          series_pathspecs=(
+            ':(glob)articles/*.md'
+            ':(glob)articles/*/*.md'
+            ':(exclude,glob)articles/TIL/*.md'
+            ':(exclude,glob)articles/assets/*.md'
+            ':(exclude,glob)articles/DRAFT/*.md'
+            ':(exclude,glob)articles/JA/*.md'
+          )
+          git diff -z --name-only --diff-filter=d "$BASE" HEAD -- "${series_pathspecs[@]}" > "$list"
           files=()
           mapfile -d '' -t files < "$list"
           echo "count=${#files[@]}" >> "$GITHUB_OUTPUT"

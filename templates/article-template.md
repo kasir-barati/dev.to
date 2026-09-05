@@ -4,7 +4,6 @@ published: false
 description: "A short description of the post."
 tags: ["tag1", "tag2"]
 # cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/<slug>/cover.png"
-# series: My Series
 # canonical_url: ""
 # date: "2026-01-01T09:00:00Z"
 ---
@@ -18,8 +17,10 @@ tags: ["tag1", "tag2"]
     and lowercases the rest.
   - cover_image: must be an absolute raw URL. devto-cli does not rewrite it, so
     a relative ./assets/... path will not resolve on dev.to.
-  - series: unquoted, and must match an existing series name exactly. Check
-    INDEX.md first; a near-miss creates a second sidebar on dev.to.
+  - series: never hand-typed. To put this article in a series, save it at
+    `articles/<series-slug>/<this-slug>.md` instead of flat under `articles/`
+    (kebab-case dir, e.g. `pipeline-pattern`) — `series` is auto-derived and
+    written by `scripts/apply_series_from_dir.py`.
   - date: only needed for scheduled publishing, alongside `published: false`.
 -->
 
@@ -30,9 +31,13 @@ Open with the personal motivation or the discovery that made this worth writing.
 ## Core Concept
 
 Explain the mechanism, driven by a diagram. Store D2 sources under
-`articles/assets/<slug>/diagrams/NN-name.d2` and reference the rendered PNG:
+`articles/assets/<slug>/diagrams/NN-name.d2` and reference the rendered PNG —
+assets always live at `articles/assets/<slug>/` regardless of where this
+article file lives, so the relative path depends on this file's own depth:
 
 ![Diagram description](./assets/<slug>/diagrams/01-overview.png)
+<!-- from a series article one level deep instead, use:
+![Diagram description](../assets/<slug>/diagrams/01-overview.png) -->
 
 ## Deep Dive
 

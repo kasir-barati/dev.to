@@ -28,13 +28,17 @@ FINDING_RE = re.compile(r"^\S+\.md:\d+(?::\d+)?\s+\w+\s+(MD\d+)/")
 
 
 def resolve_config():
-    """Absolute path to the ruleset, or None.
+    """
+    Absolute path to the ruleset, or None.
 
     The repo-local config wins so CI and local runs agree. The path must be
     absolute because the baseline lint runs from a temporary directory, where
     markdownlint's own config discovery would find nothing.
     """
-    for candidate in (".markdownlint-cli2.jsonc", os.path.expanduser("~/.markdownlint-cli2.jsonc")):
+    for candidate in (
+        ".markdownlint-cli2.jsonc",
+        os.path.expanduser("~/.markdownlint-cli2.jsonc"),
+    ):
         if os.path.exists(candidate):
             return os.path.abspath(candidate)
     return None
@@ -64,13 +68,32 @@ def run_lint(paths, cwd=None):
     return counts
 
 
+# Flat articles/*.md plus one-level-deep series directories (articles/<dir>/*.md), excluding the reserved dirs that already have distinct meaning (TIL notes, per-article assets, gitignored drafts/translations).
+SERIES_PATHSPECS = [
+    ":(glob)articles/*.md",
+    ":(glob)articles/*/*.md",
+    ":(exclude,glob)articles/TIL/*.md",
+    ":(exclude,glob)articles/assets/*.md",
+    ":(exclude,glob)articles/DRAFT/*.md",
+    ":(exclude,glob)articles/JA/*.md",
+]
+
+
 def changed_articles(base):
     """Articles added or modified relative to base, plus untracked ones."""
     paths = set()
     for cmd in (
-        ["git", "diff", "--name-only", "--diff-filter=d", f"{base}...HEAD", "--", "articles/*.md"],
-        ["git", "diff", "--name-only", "--diff-filter=d", "--", "articles/*.md"],
-        ["git", "ls-files", "--others", "--exclude-standard", "--", "articles/*.md"],
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "--diff-filter=d",
+            f"{base}...HEAD",
+            "--",
+            *SERIES_PATHSPECS,
+        ],
+        ["git", "diff", "--name-only", "--diff-filter=d", "--", *SERIES_PATHSPECS],
+        ["git", "ls-files", "--others", "--exclude-standard", "--", *SERIES_PATHSPECS],
     ):
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode == 0:
@@ -82,7 +105,9 @@ def baseline_counts(base, paths, workdir):
     """Lint each path as it exists at base. Files absent at base score zero."""
     staged = []
     for path in paths:
-        blob = subprocess.run(["git", "show", f"{base}:{path}"], capture_output=True, text=True)
+        blob = subprocess.run(
+            ["git", "show", f"{base}:{path}"], capture_output=True, text=True
+        )
         if blob.returncode != 0:
             continue  # new article: baseline is an empty, error-free file
         target = os.path.join(workdir, path)
@@ -94,17 +119,27 @@ def baseline_counts(base, paths, workdir):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("paths", nargs="*")
-    parser.add_argument("--base", default="origin/main", help="revision to compare against")
-    parser.add_argument("--changed", action="store_true", help="derive the file list from git")
+    parser.add_argument(
+        "--base", default="origin/main", help="revision to compare against"
+    )
+    parser.add_argument(
+        "--changed", action="store_true", help="derive the file list from git"
+    )
     args = parser.parse_args()
 
     if shutil.which("npx") is None:
         print("[!] npx not found; cannot run markdownlint.", file=sys.stderr)
         return 1
 
-    paths = changed_articles(args.base) if args.changed else sorted(p for p in args.paths if p.endswith(".md"))
+    paths = (
+        changed_articles(args.base)
+        if args.changed
+        else sorted(p for p in args.paths if p.endswith(".md"))
+    )
     if not paths:
         print("[-] No changed articles to lint.")
         return 0
@@ -113,10 +148,15 @@ def main():
         # Falling back to markdownlint defaults would enable MD013, which this
         # repo deliberately disables; the ratchet would then reject every new
         # article. Fail loudly instead of silently changing the ruleset.
-        print("[!] No .markdownlint-cli2.jsonc found in the repo or home directory.", file=sys.stderr)
+        print(
+            "[!] No .markdownlint-cli2.jsonc found in the repo or home directory.",
+            file=sys.stderr,
+        )
         return 1
 
-    print(f"[-] Linting {len(paths)} changed article(s) against {args.base} using {CONFIG}.")
+    print(
+        f"[-] Linting {len(paths)} changed article(s) against {args.base} using {CONFIG}."
+    )
     current = run_lint(paths)
 
     with tempfile.TemporaryDirectory() as workdir:
@@ -124,10 +164,16 @@ def main():
 
     new_files = [p for p in paths if p not in existed]
     if new_files:
-        print(f"[-] {len(new_files)} new article(s) must be lint clean: {', '.join(new_files)}")
+        print(
+            f"[-] {len(new_files)} new article(s) must be lint clean: {', '.join(new_files)}"
+        )
 
     rules = sorted(set(current) | set(base))
-    regressions = {rule: (base[rule], current[rule]) for rule in rules if current[rule] > base[rule]}
+    regressions = {
+        rule: (base[rule], current[rule])
+        for rule in rules
+        if current[rule] > base[rule]
+    }
 
     total_base, total_current = sum(base.values()), sum(current.values())
     print(f"[-] markdownlint errors: {total_base} at base -> {total_current} now.")
