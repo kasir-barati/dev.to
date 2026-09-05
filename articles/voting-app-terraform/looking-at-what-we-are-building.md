@@ -1,14 +1,16 @@
 ---
-title: "Looking at what we are Building"
+title: Looking at what we are Building
 published: true
-description: "Setting up a safe non-root AWS identity, and a guided tour of the voting app's architecture diagram before reading a single line of Terraform."
+description: 'Setting up a safe non-root AWS identity, and a guided tour of the voting app''s architecture diagram before reading a single line of Terraform.'
 tags:
   - terraform
   - aws
   - eks
   - iac
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/looking-at-what-we-are-building/cover.png?v=164e88c"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/looking-at-what-we-are-building/cover.png?v=ef9fa80'
 series: Voting App Terraform
+id: 4584536
+date: '2026-09-05T21:25:59Z'
 ---
 
 So now that you have a [basic understanding of how Terraform works](https://dev.to/kasir-barati/terraform-basics-32hf), before you start running any `terraform` command against a real AWS account, two things need to happen: you need an identity Terraform can authenticate as, and you need a mental picture of what you're about to create, so the plan output in Part 4 isn't just a list of unfamiliar resource names.
