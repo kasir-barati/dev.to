@@ -1,16 +1,16 @@
 ---
 title: Walking Through the Terraform Config Files
 published: true
-description: 'Every .tf file in the project, explained block by block: modules, implicit dependencies via output references, and how the diagram from part 2 ties back to actual lines of code.'
+description: "Every .tf file in the project, explained block by block: modules, implicit dependencies via output references, and how the diagram from part 2 ties back to actual lines of code."
 tags:
   - terraform
   - aws
   - eks
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435"
 series: Voting App Terraform
 id: 4586866
-date: '2026-09-06T08:59:33Z'
+date: "2026-09-06T08:59:33Z"
 ---
 
 In this post I will walk through [Terraform config files](https://github.com/kasir-barati/docker/tree/948d84f667d60107817b74f00bf50b16505af9fb/k8s/voting-microservice-architecture/deployment/terraform). Here's the map before we zoom in file by file:
@@ -65,10 +65,10 @@ Every variable follows this shape: a `type` (string, number, bool, `list(string)
 flowchart TD
     L1["Lowest, edit default in variables.tf"]
 
-    L1 --> L1note["⚠️ Not recommended<br/>Mixes config with input"]
+    L1 --> L1note["⚠️ Not recommended. Mixes config with input"]
 
-    L1note -.overridden by.-> L2["Medium, terraform.tfvars<br/><code>node_instance_types = ['t3.small']</code>"]
-    L2 --> L2note["✅ Recommended<br/>This is why terraform.tfvars.example exists as a template"]
+    L1note -.overridden by.-> L2["Medium, terraform.tfvars. node_instance_types = ['t3.small']"]
+    L2 --> L2note["✅ Recommended. This is why terraform.tfvars.example exists as a template"]
 
     L2note -.overridden by.-> L3["Highest, env var / CLI flag"]
     L3 --> L3a["export TF_VAR_node_instance_types='[\"t3.small\"]'"]
