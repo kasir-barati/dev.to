@@ -1,14 +1,16 @@
 ---
-title: "Node Sizing, Resource Alarms"
+title: 'Node Sizing, Resource Alarms'
 published: true
-description: "Deep-dive of whether t3.medium x 2 is actually enough for this app's pods, why a ContainerCreating pod isn't a resource problem, and how to get alarmed before pods start getting OOM killed instead of after."
+description: 'Deep-dive of whether t3.medium x 2 is actually enough for this app''s pods, why a ContainerCreating pod isn''t a resource problem, and how to get alarmed before pods start getting OOM killed instead of after.'
 tags:
   - terraform
   - aws
   - eks
   - kubernetes
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/node-sizing-resource-alarms/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/node-sizing-resource-alarms/cover.png?v=55212f1'
 series: Voting App Terraform
+id: 4589523
+date: '2026-09-06T17:45:11Z'
 ---
 
 Maybe you also are curious as to why we picked `t3.medium` for the cluster and asked the obvious question: **is this cluster actually sized for what we're running on it, and how would we know if it stopped being sized for it?**
