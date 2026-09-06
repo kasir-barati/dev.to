@@ -62,7 +62,7 @@ Sets `region`, read from a variable rather than being hardcoded, so switching re
 Every variable follows this shape: a `type` (string, number, bool, `list(string)`, ...), a human-readable `description`, and usually a `default` so the project works out of the box. BTW this is variable precedence for overriding defaults:
 
 ```mermaid
-flowchart TD
+flowchart
     L1["Lowest, edit default in variables.tf"]
 
     L1 --> L1note["⚠️ Not recommended. Mixes config with input"]
