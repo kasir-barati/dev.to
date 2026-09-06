@@ -1,16 +1,16 @@
 ---
 title: Walking Through the Terraform Config Files
 published: true
-description: 'Every .tf file in the project, explained block by block: modules, implicit dependencies via output references, and how the diagram from part 2 ties back to actual lines of code.'
+description: "Every .tf file in the project, explained block by block: modules, implicit dependencies via output references, and how the diagram from part 2 ties back to actual lines of code."
 tags:
   - terraform
   - aws
   - eks
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435"
 series: Voting App Terraform
 id: 4586866
-date: '2026-09-06T08:59:33Z'
+date: "2026-09-06T08:59:33Z"
 ---
 
 In this post I will walk through [Terraform config files](https://github.com/kasir-barati/docker/tree/948d84f667d60107817b74f00bf50b16505af9fb/k8s/voting-microservice-architecture/deployment/terraform). Here's the map before we zoom in file by file:
@@ -124,7 +124,7 @@ Full module docs, including every other option available: [terraform-aws-modules
 
 ## [`cleanup.tf`](https://github.com/kasir-barati/docker/blob/948d84f667d60107817b74f00bf50b16505af9fb/k8s/voting-microservice-architecture/deployment/terraform/cleanup.tf)
 
-Before we can torn down this cluster's VPC/subnets, we must first use `kubectl` and delete `voting-service.yaml`/`result-service.yaml`. This frees the AWS Load Balancers Kubernetes created for them. Those Load Balancers were never created by a `resource` block, so Terraform's state doesn't know they exist and `terraform destroy` alone can't remove them. Or at least this is what my lizard brain thinks considering all the hints I saw [here](https://serverfault.com/questions/1103575/terraform-destroy-failing-for-kubernetes-provider-with-pvc-in-aws-eks-how-to-fi) and [there](https://stackoverflow.com/questions/76417271/terraform-destroy-on-eks-fails-within-github-actions-workflow). But still since I was not so sure I asked it [here](https://repost.aws/questions/QU-1eaoDeuThmDyQnj8qCGPQ/do-kubernetes-loadbalancer-services-need-to-be-deleted-before-terraform-destroy-when-eks-is-provisioned-by-terraform-but-nlbs-are-not).
+Before we can torn down this cluster's VPC/subnets, we must first use `kubectl` and delete `voting-service.yaml`/`result-service.yaml`. This frees the AWS Load Balancers Kubernetes created for them. Those Load Balancers were never created by a `resource` block, so Terraform's state doesn't know they exist and `terraform destroy` alone can't remove them. Or at least this is what my lizard brain thinks considering [all the hints I saw here](https://serverfault.com/questions/1103575/terraform-destroy-failing-for-kubernetes-provider-with-pvc-in-aws-eks-how-to-fi) and [there](https://stackoverflow.com/questions/76417271/terraform-destroy-on-eks-fails-within-github-actions-workflow). But still since [I was not so sure I asked it here](https://repost.aws/questions/QU-1eaoDeuThmDyQnj8qCGPQ/do-kubernetes-loadbalancer-services-need-to-be-deleted-before-terraform-destroy-when-eks-is-provisioned-by-terraform-but-nlbs-are-not).
 
 ## [`outputs.tf`](https://github.com/kasir-barati/docker/blob/948d84f667d60107817b74f00bf50b16505af9fb/k8s/voting-microservice-architecture/deployment/terraform/outputs.tf)
 
