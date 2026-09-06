@@ -1,14 +1,16 @@
 ---
-title: "Setup Infra, Deploy the App, Verify, and Tear It All Down"
+title: 'Setup Infra, Deploy the App, Verify, and Tear It All Down'
 published: true
-description: "Running the Terraform setup for real, getting a public URL with no domain purchase, and tearing it all down without leaving anything billing in the background."
+description: 'Running the Terraform setup for real, getting a public URL with no domain purchase, and tearing it all down without leaving anything billing in the background.'
 tags:
   - terraform
   - aws
   - eks
   - kubernetes
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/deploy-verify-and-destroy/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/deploy-verify-and-destroy/cover.png?v=9c7e349'
 series: Voting App Terraform
+id: 4587418
+date: '2026-09-06T11:08:24Z'
 ---
 
 I hope now you have a fundamental grasp on the what Terraform will do. This part is about setting up the infrastructure, deploying the app, verifying it works, and tearing it all down.
