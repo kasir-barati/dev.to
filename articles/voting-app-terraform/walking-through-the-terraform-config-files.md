@@ -1,16 +1,16 @@
 ---
 title: Walking Through the Terraform Config Files
 published: true
-description: 'Every .tf file in the project, explained block by block: modules, implicit dependencies via output references, and how the diagram from part 2 ties back to actual lines of code.'
+description: "Every .tf file in the project, explained block by block: modules, implicit dependencies via output references, and how the diagram from part 2 ties back to actual lines of code."
 tags:
   - terraform
   - aws
   - eks
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435"
 series: Voting App Terraform
 id: 4586866
-date: '2026-09-06T08:59:33Z'
+date: "2026-09-06T08:59:33Z"
 ---
 
 In this post I will walk through [Terraform config files](https://github.com/kasir-barati/docker/tree/948d84f667d60107817b74f00bf50b16505af9fb/k8s/voting-microservice-architecture/deployment/terraform). Here's the map before we zoom in file by file:
@@ -62,7 +62,7 @@ Sets `region`, read from a variable rather than being hardcoded, so switching re
 Every variable follows this shape: a `type` (string, number, bool, `list(string)`, ...), a human-readable `description`, and usually a `default` so the project works out of the box. BTW this is variable precedence for overriding defaults:
 
 ```mermaid
-flowchart
+flowchart TD
     L1["Lowest, edit default in variables.tf"]
 
     L1 --> L1note["⚠️ Not recommended. Mixes config with input"]
@@ -71,8 +71,8 @@ flowchart
     L2 --> L2note["✅ Recommended. This is why terraform.tfvars.example exists as a template"]
 
     L2note -.overridden by.-> L3["Highest, env var / CLI flag"]
-    L3 --> L3a["export TF_VAR_node_instance_types='[\"t3.small\"]'"]
-    L3 --> L3b["-var node_instance_types='[\"t3.small\"]'"]
+    L3 --> L3a["export TF_VAR_node_instance_types='[t3.small]'"]
+    L3 --> L3b["-var node_instance_types='[t3.small]'"]
 ```
 
 This project defines: `aws_region`, `environment`, `cluster_name`, `kubernetes_version`, `vpc_cidr`, `azs`, node sizing (`node_instance_types`/`node_desired_size`/`node_min_size`/`node_max_size`), `cluster_endpoint_public_access`, and `console_viewer_username`. Full list with descriptions can be seen in [the `variables.tf`](https://github.com/kasir-barati/docker/blob/948d84f667d60107817b74f00bf50b16505af9fb/k8s/voting-microservice-architecture/deployment/terraform/variables.tf).
