@@ -1,14 +1,16 @@
 ---
-title: "A Database Design Mistake Which Shows itself in the API"
+title: A Database Design Mistake Which Shows itself in the API
 published: true
-description: "Why storing content and tts_friendly_content as two independently editable columns turned a simple straightforward into a synchronization nightmare and how I am replacing sanitization with sending style instrcutions to Qwen3-TTS prompt instead."
+description: Why storing content and tts_friendly_content as two independently editable columns turned a simple straightforward into a synchronization nightmare and how I am replacing sanitization with sending style instrcutions to Qwen3-TTS prompt instead.
 tags:
   - databasedesign
   - postgresql
   - llm
   - tts
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/a-database-design-mistake-which-shows-itself-in-the-api/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/a-database-design-mistake-which-shows-itself-in-the-api/cover.png?v=8fadd89'
 series: System Design
+id: 4600638
+date: '2026-09-07T22:13:09Z'
 ---
 
 Imagine you have a [`ChapterContent`](https://github.com/kasir-barati/smart-novel/blob/7ef4d9f25bbeac9e3226b9009f76d74505f4147b/apps/backend/prisma/schema.prisma#L66-L67) table in PostgreSQL:
