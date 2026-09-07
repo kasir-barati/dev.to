@@ -2,7 +2,7 @@
 
 # Article index
 
-8 article(s) in this repository, 8 published to [dev.to/kanywst](https://dev.to/kanywst), across 2 series.
+13 article(s) in this repository, 13 published to [dev.to/kanywst](https://dev.to/kanywst), across 3 series.
 
 ## Series
 
@@ -15,6 +15,16 @@
 | Subagenting | `llm`, `programming`, `productivity` | pending |  | [src](./articles/agentic-programming/subagenting.md) |
 | Understanding MCP, Skills, and Plugins | `ai`, `llm`, `vibeengineering` | pending |  | [src](./articles/agentic-programming/understanding-mcp-skills-and-plugins-in-coding-agents.md) |
 | Vibe Engineering -- Responsible use of LLMs | `ai`, `llm`, `productivity` | pending |  | [src](./articles/agentic-programming/vibe-engineering-resposible-use-of-llms.md) |
+
+### Voting App Terraform (5)
+
+| Article | Tags | Published | Engagement | Source |
+| --- | --- | --- | --- | --- |
+| Setup Infra, Deploy the App, Verify, and Tear It All Down | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/deploy-verify-and-destroy.md) |
+| Looking at what we are Building | `terraform`, `aws`, `eks`, `iac` | pending |  | [src](./articles/voting-app-terraform/looking-at-what-we-are-building.md) |
+| Node Sizing, Resource Alarms | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/node-sizing-resource-alarms.md) |
+| Terraform Basics | `iac`, `aws`, `terraform`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/terraform-basics.md) |
+| Walking Through the Terraform Config Files | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/walking-through-the-terraform-config-files.md) |
 
 ### System Design (2)
 
