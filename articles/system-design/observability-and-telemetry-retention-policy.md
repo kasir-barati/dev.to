@@ -1,14 +1,16 @@
 ---
-title: "Observability & Telemetry Retention Policy"
+title: Observability & Telemetry Retention Policy
 published: true
-description: "A pragmatic telemetry retention strategy for early-stage projects: start with 14 days, scale when needed, and avoid vendor lock-in with OpenTelemetry."
+description: 'A pragmatic telemetry retention strategy for early-stage projects: start with 14 days, scale when needed, and avoid vendor lock-in with OpenTelemetry.'
 tags:
   - observability
   - opentelemetry
   - cloudinfrastructure
   - devops
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/observability-and-telemetry-retention-policy/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/observability-and-telemetry-retention-policy/cover.png?v=29599e9'
 series: System Design
+id: 4618260
+date: '2026-09-10T00:11:16Z'
 ---
 
 ## tl;dr
