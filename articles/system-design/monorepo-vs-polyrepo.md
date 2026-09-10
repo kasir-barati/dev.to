@@ -1,13 +1,15 @@
 ---
-title: "Monorepo vs. Polyrepo"
+title: Monorepo vs. Polyrepo
 published: true
-description: "When two projects belong to each other and it is beneficial to put them all inside one repo, and when you should split them into their own repos."
+description: 'When two projects belong to each other and it is beneficial to put them all inside one repo, and when you should split them into their own repos.'
 tags:
   - monorepo
   - polyrepo
   - softwarearchitecture
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/monorepo-vs-polyrepo/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/monorepo-vs-polyrepo/cover.png?v=b04df35'
 series: System Design
+id: 4618484
+date: '2026-09-10T01:12:57Z'
 ---
 
 I had an technical debate about when one should "just put it all in one monorepo", and honestly at that time I was on the side of monorepo for the project in question but did not know how to reason about it. I mean I was not sure how it pays off. So that is why I did a little bit of thinking and realized we do not need to answer "are these projects related?". Almost everything in a product is related 😉.
@@ -50,4 +52,4 @@ Boiled down, the questions that decide "same repo or separate repo" are:
 3. **Do they release and version together in practice?** Two apps deployed in lockstep benefit from atomic commits across both. Two services with independent release cadences don't need that coupling, and a shared repo can make it harder to see which one actually changed.
 4. **Does "related product" already imply "related tooling"?** It often doesn't. Two parts of the same product can legitimately be written in different languages for good reasons (ML tooling in Python, application layer in TypeScript), that's a reason to keep them separate, not a coincidence to design around.
 
-![Monorepo VS polyrepo in a nutshell](../assets/monorepo-vs-polyrepo/monorepo-vs-polyrepo-in-nutshell.png)
+![Monorepo VS polyrepo in a nutshell](../assets/monorepo-vs-polyrepo/monorepo-vs-polyrepo-in-nutshell.png?v=f8fd4b5)
