@@ -1,14 +1,16 @@
 ---
-title: "Lockstep Deployment Anti-pattern"
+title: Lockstep Deployment Anti-pattern
 published: true
-description: "How two independently deployable services quietly become impossible to ship separately and a concrete fix for the coupling that causes it."
+description: How two independently deployable services quietly become impossible to ship separately and a concrete fix for the coupling that causes it.
 tags:
   - systemdesign
   - microservices
   - coupling
   - antipattern
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/lockstep-deployment-anti-pattern/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/lockstep-deployment-anti-pattern/cover.png?v=9e8341a'
 series: System Design
+id: 4645353
+date: '2026-09-13T20:16:50Z'
 ---
 
 Lockstep deployment is what happens when two services that are supposed to be independently deployable quietly stop being that. On paper they're separate repos, separate release cycles, separate teams even. In practice, you can't ship a change to one without also shipping a matching change to the other, in the same window, or something breaks.
