@@ -2,9 +2,20 @@
 
 # Article index
 
-13 article(s) in this repository, 13 published to [dev.to/kanywst](https://dev.to/kanywst), across 3 series.
+17 article(s) in this repository, 17 published to [dev.to/kanywst](https://dev.to/kanywst), across 3 series.
 
 ## Series
+
+### System Design (6)
+
+| Article | Tags | Published | Engagement | Source |
+| --- | --- | --- | --- | --- |
+| A Database Design Mistake Which Shows itself in the API | `databasedesign`, `postgresql`, `llm`, `tts` | pending |  | [src](./articles/system-design/a-database-design-mistake-which-shows-itself-in-the-api.md) |
+| Lockstep Deployment Anti-pattern | `systemdesign`, `microservices`, `coupling`, `antipattern` | pending |  | [src](./articles/system-design/lockstep-deployment-anti-pattern.md) |
+| Monorepo vs. Polyrepo | `monorepo`, `polyrepo`, `softwarearchitecture` | pending |  | [src](./articles/system-design/monorepo-vs-polyrepo.md) |
+| Observability & Telemetry Retention Policy | `observability`, `opentelemetry`, `cloudinfrastructure`, `devops` | pending |  | [src](./articles/system-design/observability-and-telemetry-retention-policy.md) |
+| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/system-design/rabbitmq-consumer-as-a-separate-worker-service.md) |
+| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/system-design/the-pipeline-pattern.md) |
 
 ### Agentic Programming (5)
 
@@ -25,13 +36,6 @@
 | Node Sizing, Resource Alarms | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/node-sizing-resource-alarms.md) |
 | Terraform Basics | `iac`, `aws`, `terraform`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/terraform-basics.md) |
 | Walking Through the Terraform Config Files | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/walking-through-the-terraform-config-files.md) |
-
-### System Design (2)
-
-| Article | Tags | Published | Engagement | Source |
-| --- | --- | --- | --- | --- |
-| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/system-design/rabbitmq-consumer-as-a-separate-worker-service.md) |
-| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/system-design/the-pipeline-pattern.md) |
 
 ## Standalone
 
