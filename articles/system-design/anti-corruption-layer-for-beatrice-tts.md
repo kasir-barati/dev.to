@@ -1,14 +1,16 @@
 ---
-title: "Anti-Corruption Layer for Beatrice's TTS Status Vocabulary"
+title: Anti-Corruption Layer for Beatrice's TTS Status Vocabulary
 published: true
-description: "Why smart-novel treats Beatrice's TTS status strings as untyped, boundary-only vocabulary — and where the translation into our own NarrationStatus enum lives."
+description: 'Why smart-novel treats Beatrice''s TTS status strings as untyped, boundary-only vocabulary — and where the translation into our own NarrationStatus enum lives.'
 tags:
   - architecture
   - ddd
   - integration
   - anticorruptionlayer
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/anti-corruption-layer-for-beatrice-tts/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/anti-corruption-layer-for-beatrice-tts/cover.png?v=27ba654'
 series: System Design
+id: 4650287
+date: '2026-09-14T11:55:19Z'
 ---
 
 An anti-corruption layer (ACL) is a translation boundary between two systems that don't share a domain model, **typically** your service and an external one you don't control. Instead of letting the external system's types, vocabulary, or assumptions leak into your codebase, you translate at the boundary into a model you own, and everything past that boundary only ever speaks your vocabulary.
@@ -49,15 +51,15 @@ A DTO at a trust boundary should validate the shape it can actually enforce and 
 
 Before this change, the same three string comparisons (`update.status === 'completed'`, `=== 'failed'`) were duplicated five times across [`ChapterNarrationService.handleStatusUpdate`](https://github.com/Ponos-OS/smart-novel/blob/b16fb53cc2c267f43e8ec356e9defa46a936065e/apps/backend/src/modules/novel/services/chapter-narration.service.ts#L124-L153):
 
-![Anti-corruption layer used for terminal statues](../assets/anti-corruption-layer-for-beatrice-tts/terminal-state-acl.png)
+![Anti-corruption layer used for terminal statues](../assets/anti-corruption-layer-for-beatrice-tts/terminal-state-acl.png?v=aebe4cf)
 
 And [`shouldApplyStatusUpdate`](https://github.com/Ponos-OS/smart-novel/blob/b16fb53cc2c267f43e8ec356e9defa46a936065e/apps/backend/src/modules/novel/services/chapter-narration.service.ts#L185-L229):
 
-![Anti-corruption layer used for business logic](../assets/anti-corruption-layer-for-beatrice-tts/should-apply-status-update-acl.png)
+![Anti-corruption layer used for business logic](../assets/anti-corruption-layer-for-beatrice-tts/should-apply-status-update-acl.png?v=3e04240)
 
 Plus the `switch` in [`mapBeatriceStatus`](https://github.com/Ponos-OS/smart-novel/blob/b16fb53cc2c267f43e8ec356e9defa46a936065e/apps/backend/src/modules/novel/services/chapter-narration.service.ts#L235-L246).
 
-![Switch ACL](../assets/anti-corruption-layer-for-beatrice-tts/switch-acl.png)
+![Switch ACL](../assets/anti-corruption-layer-for-beatrice-tts/switch-acl.png?v=79c1a3f)
 
 If Beatrice ever renamed `completed` to `succeeded`, all five spots would silently need updating, miss one and the narration lock, the persisted audio URL, or the published subscription event would each independently disagree about whether the job was actually done. Now every one of those call sites goes through the same two predicates, so a rename is a one-line fix in `beatrice-status.util.ts`.
 
