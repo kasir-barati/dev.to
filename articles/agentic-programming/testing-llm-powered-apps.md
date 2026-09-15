@@ -1,16 +1,16 @@
 ---
 title: Testing LLM-powered Apps
 published: true
-description: 'Why testing an LLM-integrated app means testing your own code''s contract with a non-deterministic dependency, not the model itself.'
+description: "Why testing an LLM-integrated app means testing your own code's contract with a non-deterministic dependency, not the model itself."
 tags:
   - testing
   - llm
   - cicd
   - automation
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/testing-llm-powered-apps/cover.png?v=123d5d2'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/testing-llm-powered-apps/cover.png?v=123d5d2"
 series: Agentic Programming
 id: 4653896
-date: '2026-09-14T23:34:54Z'
+date: "2026-09-14T23:34:54Z"
 ---
 
 The first time I added an LLM call to my app I tried to e2e test it the way I'd test a deterministic function:
@@ -245,11 +245,11 @@ They're slower, cost money, and are non-deterministic by nature, which is fine b
                        │ Prompt │
                        └───┬────┘
                            │
-                           ᐯ
-  ┌───────────┐       ┌──────────────┐  Structured output  ┌────────┐
+                           ᐯ            Structured
+  ┌───────────┐       ┌──────────────┐    output           ┌────────┐
   │ Generated │ ────> │    AI        │ ───────┬──────────> │ Score  │
   │  Answer   │       | LLM as judge |        |            └────────┘
-  └───────────┘       └────┬─────────┘        |   ┌────────┐
+  └───────────┘       └──────────────┘        |   ┌────────┐
                            ᐱ                  └──>│ Reason │
   ┌──────────┐             |                      └────────┘
   │ Context  │ ────────────┘
