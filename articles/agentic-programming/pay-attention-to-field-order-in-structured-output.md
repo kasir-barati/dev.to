@@ -1,14 +1,16 @@
 ---
-title: "Pay Attention to Field Order in Structured Output"
+title: Pay Attention to Field Order in Structured Output
 published: true
-description: "Why the order of fields in a Pydantic/JSON schema can change whether an LLM reasons before deciding or just rationalizes after."
+description: Why the order of fields in a Pydantic/JSON schema can change whether an LLM reasons before deciding or just rationalizes after.
 tags:
   - llm
   - pydantic
   - programming
   - contextengineering
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/pay-attention-to-field-order-in-structured-output/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/pay-attention-to-field-order-in-structured-output/cover.png?v=49ea727'
 series: Agentic Programming
+id: 4688512
+date: '2026-09-18T21:57:02Z'
 ---
 
 It started with a simple schema:
