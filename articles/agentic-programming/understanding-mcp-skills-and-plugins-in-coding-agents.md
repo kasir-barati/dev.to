@@ -1,15 +1,15 @@
 ---
-title: 'Understanding MCP, Skills, and Plugins'
+title: "Understanding MCP, Skills, and Plugins"
 published: true
-description: 'Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents.'
+description: "Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents."
 tags:
   - ai
   - llm
   - vibeengineering
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png"
 series: Agentic Programming
 id: 4468753
-date: '2026-08-23T16:36:48Z'
+date: "2026-08-23T16:36:48Z"
 ---
 
 You might have heard of skills, plugins, and MCPs. But if you have not I guess if I had to put explain it in 10 seconds I would say:
@@ -36,6 +36,24 @@ To summarize MCP took of because it was and is:
 > They can fill up your context window real quick even though coding agents are smart enough to only load tools they will be needing. But still it is a risk you need to keep in mind.
 
 <!-- -->
+
+> 💡 **Progressive Disclosure Fixes the Downside Above**
+>
+> One way vendors are tackling the context-window problem is by going meta instead of flat. [Massive MCP](https://github.com/massive-com/mcp_massive) used to ship 10-20 tools, one per API endpoint (`GetSharePrice`, technical indicators, etc.). They've since replaced that with a small number of tools that let the agent explore the API itself:
+>
+> | Tool               | Description                                                                                                                                                                                                                                               |
+> | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `search_endpoints` | Search for API endpoints and built-in functions by natural language query. Returns titles, path patterns, and descriptions. Set `detail` to `"more"` for query parameter docs, or `"verbose"` for full documentation. Use `max_results` to limit results. |
+> | `call_api`         | Call any Massive.com REST API endpoint. Supports storing results as an in-memory database table (`store_as`) and applying post-processing functions (`apply`). Paginated responses include a next-page hint.                                              |
+> | `query_data`       | Run SQL against stored SQLite DB. Supports `SHOW TABLES`, `DESCRIBE <table>`, `DROP TABLE <table>`, CTEs, window functions, and more. Results can also be post-processed with `apply`.                                                                    |
+>
+> — I copied this table from the [Massive MCP README](https://github.com/massive-com/mcp_massive/blob/c58ec7e4df7482c53fc4adeb2de0e979f77f3a23/README.md#tools).
+>
+> As you can see LLM can search what's available, then call whichever endpoint it finds. Same idea as skills' progressive disclosure, don't load everything up front, let the agent pull in only what it needs.
+>
+> Two wins from this: less context clutter (you're not paying for descriptions of 20 tools when the agent only needs 1), and more coherent behavior (fewer overlapping tools means fewer ways for the agent to pick the "wrong" one, Massive's API had two or three ways to fetch a share price before this change).
+>
+> Don't take it to the extreme though. If your only tool is `list_tools` and the agent has to call that repeatedly just to figure out what `list_tools` returns, you've gone too meta. There's no fixed answer for where the right level is, it depends on the task and the model, so the only real way to tell is to test both structures against your own use case and compare.
 
 > 💡 **Pro Tip**
 >

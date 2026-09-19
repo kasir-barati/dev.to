@@ -61,13 +61,22 @@ You'll see server configs like this constantly in tutorials:
 
 | Concern            | Local / notebook (`npx -y`, `uvx`)                     | Production                                                                                                                              |
 | ------------------ | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Version            | It is fine to not pin it to a specific version         | Pin an exact version. This is about reproducibility                                                                                     |
+| Version            | It is fine to not pin it to a specific version         | Judgment call, see below                                                                                                                 |
 | Network dependency | Fine to hit npm/PyPI at startup                        | We should NOT depend on a third-party registry being up, similar to what you would do in your NodeJS app                                |
 | Scope              | Usually root of the current dir, unrestricted access   | Scope tightly to a specific directory, read-only where possible, run the server in its own sandboxed/least-privileged process/container |
 | Process lifecycle  | Spawned per notebook cell, killed when the kernel dies | Needs supervision, restart on crash, health checks, logs shipped somewhere                                                              |
 | Secrets            | `.env` file next to the notebook is fine               | Injected via your normal secret manager (not baked into an image or checked into config)                                                |
 
-Rule of thumb: `npx -y` / `uvx` are a package manager's "just run it" shortcut. Great for answering "does this tool even work", bad as a production dependency-pinning strategy. When you go to production, pin the version and run it as a supervised subprocess.
+Rule of thumb: `npx -y` / `uvx` are a package manager's "just run it" shortcut. Great for answering "does this tool even work", bad as a production dependency-pinning strategy. When you go to production, run it as a supervised subprocess, and think about the version deliberately instead of defaulting to `latest`.
+
+### Should you pin the version?
+
+This is the same tradeoff as pinning any npm/pip dependency, it's a judgment call, not a blanket rule:
+
+- **Pin** specialized or niche MCP servers, especially ones from smaller vendors that change frequently. You don't want a silent upstream change to alter the tools your agent relies on without you noticing.
+- **Track latest** for mainstream MCP servers built on top of fast-moving products (a browser, Google Docs, etc.). Microsoft, for example, updates Playwright often, and pinning your MCP server to an old version can leave it talking to a Chrome build the server no longer supports. Forcing everyone using the server onto your pinned version isn't realistic either.
+
+Either way, know which one you're doing. `npx -y pkg@latest` and `npx -y pkg` are both "unpinned", if you want reproducibility, pin an exact version (`pkg@1.2.3`), and if you want that pin to live somewhere reviewable, put it in a `package.json` you commit, as shown next.
 
 ## Example
 
