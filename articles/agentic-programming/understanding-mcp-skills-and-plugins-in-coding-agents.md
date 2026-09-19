@@ -1,15 +1,15 @@
 ---
-title: "Understanding MCP, Skills, and Plugins"
+title: 'Understanding MCP, Skills, and Plugins'
 published: true
-description: "Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents."
+description: 'Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents.'
 tags:
   - ai
   - llm
   - vibeengineering
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png'
 series: Agentic Programming
 id: 4468753
-date: "2026-08-23T16:36:48Z"
+date: '2026-08-23T16:36:48Z'
 ---
 
 You might have heard of skills, plugins, and MCPs. But if you have not I guess if I had to put explain it in 10 seconds I would say:

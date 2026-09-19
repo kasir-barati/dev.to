@@ -1,13 +1,15 @@
 ---
-title: "What Matters in Agentic Programming"
+title: What Matters in Agentic Programming
 published: true
-description: "Stop chasing autonomous agents. Learn the practical principles for building reliable, production-ready AI systems. From focusing on business problems to the critical habit of checking your traces."
+description: 'Stop chasing autonomous agents. Learn the practical principles for building reliable, production-ready AI systems. From focusing on business problems to the critical habit of checking your traces.'
 tags:
   - agents
   - llm
   - softwaredevelopment
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/what-matters-in-agentic-programming/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/what-matters-in-agentic-programming/cover.png?v=aee822b'
 series: Agentic Programming
+id: 4696122
+date: '2026-09-19T20:55:08Z'
 ---
 
 ## 1. Focus on the Problem, Not the Solution
