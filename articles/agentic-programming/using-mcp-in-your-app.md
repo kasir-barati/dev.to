@@ -1,14 +1,16 @@
 ---
-title: "Using MCP in Your App"
+title: Using MCP in Your App
 published: true
-description: "How the Model Context Protocol's host/client/server pieces fit together, what npx/uvx are for in local dev vs. production, a working PydanticAI example, and stdio vs. Streamable HTTP transports."
+description: 'How the Model Context Protocol''s host/client/server pieces fit together, what npx/uvx are for in local dev vs. production, a working PydanticAI example, and stdio vs. Streamable HTTP transports.'
 tags:
   - mcp
   - pydanticai
   - agents
   - programming
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/using-mcp-in-your-app/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/using-mcp-in-your-app/cover.png?v=495b2bb'
 series: Agentic Programming
+id: 4694829
+date: '2026-09-19T14:59:04Z'
 ---
 
 In this post I'd like to talk about what MCP's architecture actually is, what's safe to do in a notebook that you should **not** do in production, a working example with PydanticAI, and transport mechanisms you'll actually meet in practice.
