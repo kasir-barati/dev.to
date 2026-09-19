@@ -131,6 +131,7 @@ if __name__ == "__main__":
 Things worth noting:
 
 - Another option is to drop the whole installing and instead just invoke the binary directly:
+
   ```py
   docs_server = MCPToolset(
       command="node",
@@ -140,6 +141,7 @@ Things worth noting:
       ],
   )
   ```
+
 - `async with agent:` opens and cleanly tears down every toolset's MCP session around the run so we don't have to manage the subprocess lifecycle manually.
 - Because the server is scoped to `./docs`, the agent can read files inside that folder and nothing else. That's the "scope tightly" suggestion. Don't point a filesystem server at `.` or `/` unless you've deliberately decided the agent should have access to everything under it. And even then I guess you would be better off sandboxing such agents.
 
@@ -147,9 +149,28 @@ Things worth noting:
 >
 > Honestly I have not tried this one yet to know how much better or worse it would be. But I guess you can also try:
 >
-> | `package.json`                                                                                                                                                                                                               | `src/agent.py`                                                                                      |
-> | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
-> | `{`<br>`  "private": true,`<br>`  "dependencies": {`<br>`    "@modelcontextprotocol/server-filesystem": "2026.8.31"`<br>`  },`<br>`  "scripts": {`<br>`    "mcp:filesystem": "mcp-server-filesystem ./docs"`<br>`  }`<br>`}` | `docs_server = MCPToolset(`<br>`    command="npm",`<br>`    args=["run", "mcp:filesystem"],`<br>`)` |
+> `package.json`:
+>
+> ```json
+> {
+>   "private": true,
+>   "dependencies": {
+>     "@modelcontextprotocol/server-filesystem": "2026.8.31"
+>   },
+>   "scripts": {
+>     "mcp:filesystem": "mcp-server-filesystem ./docs"
+>   }
+> }
+> ```
+>
+> `src/agent.py`:
+>
+> ```py
+> docs_server = MCPToolset(
+>     command="npm",
+>     args=["run", "mcp:filesystem"],
+> )
+> ```
 
 ## Two Transports: `stdio` vs. Streamable HTTP
 

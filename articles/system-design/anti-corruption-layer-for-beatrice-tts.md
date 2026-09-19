@@ -43,7 +43,7 @@ A DTO at a trust boundary should validate the shape it can actually enforce and 
 
 ### The Translation Layer
 
-[`beatrice-status.util.ts`](<>) is the ACL itself: it's the one and only place that knows Beatrice spells "done" as `'completed'` and "failed" as `'failed'`.
+[`beatrice-status.util.ts`](https://github.com/Ponos-OS/smart-novel/blob/f2ff25dc18b6343313bc3359bc216403b4307bfe/apps/backend/src/modules/tts-callbacks/utils/beatrice-status.util.ts) is the ACL itself: it's the one and only place that knows Beatrice spells "done" as `'completed'` and "failed" as `'failed'`.
 
 - `isBeatriceTerminalSuccess(status)` / `isBeatriceTerminalFailure(status)` are the two predicates every decision in the backend is built on.
 - `isBeatriceTerminal(status)` check will tell you when to release the narration lock (we do not really care about success or failure here).

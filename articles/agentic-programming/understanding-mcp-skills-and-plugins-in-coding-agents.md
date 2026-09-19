@@ -1,15 +1,15 @@
 ---
-title: 'Understanding MCP, Skills, and Plugins'
+title: "Understanding MCP, Skills, and Plugins"
 published: true
-description: 'Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents.'
+description: "Here we try to uncover how you should work, and utilize skills, MCPs and plugins in coding agents."
 tags:
   - ai
   - llm
   - vibeengineering
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/understanding-mcp-skills-and-plugins-in-coding-agents/cover.png"
 series: Agentic Programming
 id: 4468753
-date: '2026-08-23T16:36:48Z'
+date: "2026-08-23T16:36:48Z"
 ---
 
 You might have heard of skills, plugins, and MCPs. But if you have not I guess if I had to put explain it in 10 seconds I would say:
@@ -54,6 +54,8 @@ To summarize MCP took of because it was and is:
 > Two wins from this: less context clutter (you're not paying for descriptions of 20 tools when the agent only needs 1), and more coherent behavior (fewer overlapping tools means fewer ways for the agent to pick the "wrong" one, Massive's API had two or three ways to fetch a share price before this change).
 >
 > Don't take it to the extreme though. If your only tool is `list_tools` and the agent has to call that repeatedly just to figure out what `list_tools` returns, you've gone too meta. There's no fixed answer for where the right level is, it depends on the task and the model, so the only real way to tell is to test both structures against your own use case and compare.
+
+<!-- -->
 
 > 💡 **Pro Tip**
 >
