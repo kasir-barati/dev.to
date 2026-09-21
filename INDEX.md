@@ -2,30 +2,36 @@
 
 # Article index
 
-17 article(s) in this repository, 17 published to [dev.to/kanywst](https://dev.to/kanywst), across 3 series.
+23 article(s) in this repository, 23 published to [dev.to/kanywst](https://dev.to/kanywst), across 3 series.
 
 ## Series
 
-### System Design (6)
-
-| Article | Tags | Published | Engagement | Source |
-| --- | --- | --- | --- | --- |
-| A Database Design Mistake Which Shows itself in the API | `databasedesign`, `postgresql`, `llm`, `tts` | pending |  | [src](./articles/system-design/a-database-design-mistake-which-shows-itself-in-the-api.md) |
-| Lockstep Deployment Anti-pattern | `systemdesign`, `microservices`, `coupling`, `antipattern` | pending |  | [src](./articles/system-design/lockstep-deployment-anti-pattern.md) |
-| Monorepo vs. Polyrepo | `monorepo`, `polyrepo`, `softwarearchitecture` | pending |  | [src](./articles/system-design/monorepo-vs-polyrepo.md) |
-| Observability & Telemetry Retention Policy | `observability`, `opentelemetry`, `cloudinfrastructure`, `devops` | pending |  | [src](./articles/system-design/observability-and-telemetry-retention-policy.md) |
-| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/system-design/rabbitmq-consumer-as-a-separate-worker-service.md) |
-| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/system-design/the-pipeline-pattern.md) |
-
-### Agentic Programming (5)
+### Agentic Programming (10)
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
 | Coding Agents & Workflows | `llm`, `programming`, `productivity`, `workflow` | pending |  | [src](./articles/agentic-programming/coding-agent-and-workflows.md) |
 | Debugging with Coding Agents -- A Systematic Strategy That Actually Works | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/agentic-programming/debugging-with-coding-agents-systematic.md) |
+| How Structured Output Enforces What LLM Returns | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/agentic-programming/how-structured-output-enforces-wha-llm-returns.md) |
+| Pay Attention to Field Order in Structured Output | `llm`, `pydantic`, `programming`, `contextengineering` | pending |  | [src](./articles/agentic-programming/pay-attention-to-field-order-in-structured-output.md) |
 | Subagenting | `llm`, `programming`, `productivity` | pending |  | [src](./articles/agentic-programming/subagenting.md) |
+| Testing LLM-powered Apps | `testing`, `llm`, `cicd`, `automation` | pending |  | [src](./articles/agentic-programming/testing-llm-powered-apps.md) |
 | Understanding MCP, Skills, and Plugins | `ai`, `llm`, `vibeengineering` | pending |  | [src](./articles/agentic-programming/understanding-mcp-skills-and-plugins-in-coding-agents.md) |
+| Using MCP in Your App | `mcp`, `pydanticai`, `agents`, `programming` | pending |  | [src](./articles/agentic-programming/using-mcp-in-your-app.md) |
 | Vibe Engineering -- Responsible use of LLMs | `ai`, `llm`, `productivity` | pending |  | [src](./articles/agentic-programming/vibe-engineering-resposible-use-of-llms.md) |
+| What Matters in Agentic Programming | `agents`, `llm`, `softwaredevelopment` | pending |  | [src](./articles/agentic-programming/what-matters-in-agentic-programming.md) |
+
+### System Design (7)
+
+| Article | Tags | Published | Engagement | Source |
+| --- | --- | --- | --- | --- |
+| A Database Design Mistake Which Shows itself in the API | `databasedesign`, `postgresql`, `llm`, `tts` | pending |  | [src](./articles/system-design/a-database-design-mistake-which-shows-itself-in-the-api.md) |
+| Anti-Corruption Layer for Beatrice's TTS Status Vocabulary | `architecture`, `ddd`, `integration`, `anticorruptionlayer` | pending |  | [src](./articles/system-design/anti-corruption-layer-for-beatrice-tts.md) |
+| Lockstep Deployment Anti-pattern | `systemdesign`, `microservices`, `coupling`, `antipattern` | pending |  | [src](./articles/system-design/lockstep-deployment-anti-pattern.md) |
+| Monorepo vs. Polyrepo | `monorepo`, `polyrepo`, `softwarearchitecture` | pending |  | [src](./articles/system-design/monorepo-vs-polyrepo.md) |
+| Observability & Telemetry Retention Policy | `observability`, `opentelemetry`, `cloudinfrastructure`, `devops` | pending |  | [src](./articles/system-design/observability-and-telemetry-retention-policy.md) |
+| RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/system-design/rabbitmq-consumer-as-a-separate-worker-service.md) |
+| The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/system-design/the-pipeline-pattern.md) |
 
 ### Voting App Terraform (5)
 
