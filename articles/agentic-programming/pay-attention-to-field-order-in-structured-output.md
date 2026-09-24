@@ -7,10 +7,10 @@ tags:
   - pydantic
   - programming
   - contextengineering
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/pay-attention-to-field-order-in-structured-output/cover.png?v=49ea727'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/pay-attention-to-field-order-in-structured-output/cover.png?v=49ea727"
 series: Agentic Programming
 id: 4688512
-date: '2026-09-18T21:57:02Z'
+date: "2026-09-18T21:57:02Z"
 ---
 
 It started with a simple schema:
@@ -74,3 +74,9 @@ asyncio.run(main())
 ```
 
 Run it a few dozen times with each ordering on a task that's genuinely ambiguous (not a simple lookup) and compare: does the `reason` field in the query-first version read like an explanation that was decided _before_ the query, or a caption written _after_ it?
+
+---
+
+## Pro Tip
+
+In your LLM-powered application always keep a `reason` field in the output schema. So this way we have clear observability into why LLM generated certain output. Also make sure to explain it very well so LLM knows what it should write for that field.
