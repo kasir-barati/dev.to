@@ -1,14 +1,16 @@
 ---
-title: "Designing a Serverless AI Digital Twin on AWS: Bedrock, Lambda and FaaS Trade-offs"
+title: 'Designing a Serverless AI Digital Twin on AWS: Bedrock, Lambda and FaaS Trade-offs'
 published: true
-description: "A system design walkthrough of a chat-based digital twin built on CloudFront, API Gateway, Lambda and Amazon Bedrock, plus a look at other FaaS approaches and how to keep functions reproducible and light."
+description: 'A system design walkthrough of a chat-based digital twin built on CloudFront, API Gateway, Lambda and Amazon Bedrock, plus a look at other FaaS approaches and how to keep functions reproducible and light.'
 tags:
   - serverless
   - bedrock
   - systemdesign
   - terraform
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/designing-a-serverless-ai-digital-twin-on-aws/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/designing-a-serverless-ai-digital-twin-on-aws/cover.png?v=75a19ac'
 series: Agentic Programming
+id: 4736778
+date: '2026-09-24T22:04:22Z'
 ---
 
 I wanted to build a chatbot that acts as my digital twin. In a nutshell, visitors open a web page, type their question, and an LLM replies with the context. It is a small system, which makes it a good excuse to talk about system design 😅.
