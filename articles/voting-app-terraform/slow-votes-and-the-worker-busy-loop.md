@@ -1,14 +1,16 @@
 ---
-title: "How to Debug the Slowness of your App"
+title: How to Debug the Slowness of your App
 published: true
-description: "A deep-dive debugging session for why the voting frontend app is so slow."
+description: A deep-dive debugging session for why the voting frontend app is so slow.
 tags:
   - aws
   - debugging
   - kubernetes
   - fullstack
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/slow-votes-and-the-worker-busy-loop/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/slow-votes-and-the-worker-busy-loop/cover.png?v=2357a22'
 series: Voting App Terraform
+id: 4743374
+date: '2026-09-25T14:42:08Z'
 ---
 
 Right after a fresh `terraform apply` + `kubectl apply`, the app was reachable and the page loaded instantly, but clicking a vote button sometimes took 5, 10, even 60 seconds to respond. Nothing crashed, nothing showed as unhealthy in `kubectl get pods`, it just felt slow, unpredictably. This post is the exact sequence of checks I took to find the real cause.
