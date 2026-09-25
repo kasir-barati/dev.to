@@ -1,13 +1,15 @@
 ---
-title: "JSONB Fields in PostgreSQL & Prisma"
+title: JSONB Fields in PostgreSQL & Prisma
 published: true
-description: "A practical guide to using JSONB fields in PostgreSQL with Prisma, covering validation with check constraints and custom functions, plus when to reach for pg_jsonschema."
+description: 'A practical guide to using JSONB fields in PostgreSQL with Prisma, covering validation with check constraints and custom functions, plus when to reach for pg_jsonschema.'
 tags:
   - postgres
   - prisma
   - databasedesign
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/jsonb-fields-in-postgres-and-prisma/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/jsonb-fields-in-postgres-and-prisma/cover.png?v=845da4f'
 series: Databas Design
+id: 4740803
+date: '2026-09-25T09:18:10Z'
 ---
 
 Usually when you know about your data structure before hand, and it is well structured with relations you just use the typical fields types. But when it is an unstructured field where we do not know the structure I do not like to start guessing, and defining them using typical scalar types which also mean separate migration SQL queries.
