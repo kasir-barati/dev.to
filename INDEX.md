@@ -2,16 +2,17 @@
 
 # Article index
 
-23 article(s) in this repository, 23 published to [dev.to/kanywst](https://dev.to/kanywst), across 3 series.
+26 article(s) in this repository, 26 published to [dev.to/kanywst](https://dev.to/kanywst), across 4 series.
 
 ## Series
 
-### Agentic Programming (10)
+### Agentic Programming (11)
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
 | Coding Agents & Workflows | `llm`, `programming`, `productivity`, `workflow` | pending |  | [src](./articles/agentic-programming/coding-agent-and-workflows.md) |
 | Debugging with Coding Agents -- A Systematic Strategy That Actually Works | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/agentic-programming/debugging-with-coding-agents-systematic.md) |
+| Designing a Serverless AI Digital Twin on AWS: Bedrock, Lambda and FaaS Trade-offs | `serverless`, `bedrock`, `systemdesign`, `terraform` | pending |  | [src](./articles/agentic-programming/designing-a-serverless-ai-digital-twin-on-aws.md) |
 | How Structured Output Enforces What LLM Returns | `ai`, `debugging`, `claude`, `productivity` | pending |  | [src](./articles/agentic-programming/how-structured-output-enforces-wha-llm-returns.md) |
 | Pay Attention to Field Order in Structured Output | `llm`, `pydantic`, `programming`, `contextengineering` | pending |  | [src](./articles/agentic-programming/pay-attention-to-field-order-in-structured-output.md) |
 | Subagenting | `llm`, `programming`, `productivity` | pending |  | [src](./articles/agentic-programming/subagenting.md) |
@@ -33,15 +34,22 @@
 | RabbitMQ Consumer as a Separate Worker Service | `nodejs`, `python`, `systemdesign`, `architecture` | pending |  | [src](./articles/system-design/rabbitmq-consumer-as-a-separate-worker-service.md) |
 | The Pipeline Pattern | `python`, `systemdesign`, `concurrency`, `architecture` | pending |  | [src](./articles/system-design/the-pipeline-pattern.md) |
 
-### Voting App Terraform (5)
+### Voting App Terraform (6)
 
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
 | Setup Infra, Deploy the App, Verify, and Tear It All Down | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/deploy-verify-and-destroy.md) |
 | Looking at what we are Building | `terraform`, `aws`, `eks`, `iac` | pending |  | [src](./articles/voting-app-terraform/looking-at-what-we-are-building.md) |
 | Node Sizing, Resource Alarms | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/node-sizing-resource-alarms.md) |
+| How to Debug the Slowness of your App | `aws`, `debugging`, `kubernetes`, `fullstack` | pending |  | [src](./articles/voting-app-terraform/slow-votes-and-the-worker-busy-loop.md) |
 | Terraform Basics | `iac`, `aws`, `terraform`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/terraform-basics.md) |
 | Walking Through the Terraform Config Files | `terraform`, `aws`, `eks`, `kubernetes` | pending |  | [src](./articles/voting-app-terraform/walking-through-the-terraform-config-files.md) |
+
+### Databas Design (1)
+
+| Article | Tags | Published | Engagement | Source |
+| --- | --- | --- | --- | --- |
+| JSONB Fields in PostgreSQL & Prisma | `postgres`, `prisma`, `databasedesign` | pending |  | [src](./articles/databas-design/jsonb-fields-in-postgres-and-prisma.md) |
 
 ## Standalone
 
