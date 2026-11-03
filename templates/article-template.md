@@ -55,3 +55,8 @@ echo "replace me"
 ## Conclusion
 
 What the reader can now do, and where to go next.
+
+---
+
+- Ponos-OS: https://github.com/Ponos-OS
+- My portfolio: https://kasir-barati.github.io
