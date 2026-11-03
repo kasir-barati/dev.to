@@ -7,10 +7,10 @@ tags:
   - pods
   - cheatsheet
   - cli
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/iac/cover.png'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/iac/cover.png"
 series: Iac
 id: 4971316
-date: '2026-11-03T19:26:34Z'
+date: "2026-11-03T19:26:34Z"
 ---
 
 ## Manage Pods
@@ -19,7 +19,7 @@ In Kubernetes we can have clusters, if we run these commands they will target th
 
 ```bash
 kubectl get pods -A                 # all namespaces
-kubectl get pods -n <namespace>     # one namespace
+kubectl get pods -n <namespace>     # find the pods by their namespace, e.g. it can be smart-novel
 kubectl get pods -A -o wide         # with node and IP
 kubectl get pods -A -w              # watch for changes
 ```
@@ -60,6 +60,23 @@ kubectl --context kind-<cluster-name> get pods -A
 > ```bash
 > kubectl --kubeconfig infra/terraform/envs/local/smart-novel-config get pods -A
 > ```
+
+## Look at the Logs
+
+```bash
+export KUBECONFIG=infra/terraform/envs/local/smart-novel-config  # you can have this if you have a kind cluster
+
+kubectl logs <pod> -n <namespace>                                # print logs of a
+kubectl logs -f <pod> -n <namespace>                             # follow (stream)
+kubectl logs --tail=100 <pod> -n <namespace>                     # last 100 lines
+kubectl logs --since=10m <pod> -n <namespace>                    # last 10 minutes
+kubectl logs -p <pod> -n <namespace>                             # previous container (after a crash)
+kubectl logs <pod> -c <container> -n <namespace>                 # specific container in a multi-container pod
+```
+
+> [!IMPORTANT]
+>
+> If you have a namespace you must pass it.
 
 ---
 
