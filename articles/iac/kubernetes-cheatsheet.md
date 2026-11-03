@@ -7,10 +7,10 @@ tags:
   - pods
   - cheatsheet
   - cli
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/iac/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/iac/cover.png'
 series: Iac
 id: 4971316
-date: "2026-11-03T19:26:34Z"
+date: '2026-11-03T19:26:34Z'
 ---
 
 ## Manage Pods
