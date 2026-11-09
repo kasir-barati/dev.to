@@ -2,7 +2,7 @@
 
 # Article index
 
-26 article(s) in this repository, 26 published to [dev.to/kanywst](https://dev.to/kanywst), across 4 series.
+27 article(s) in this repository, 27 published to [dev.to/kanywst](https://dev.to/kanywst), across 5 series.
 
 ## Series
 
@@ -50,6 +50,12 @@
 | Article | Tags | Published | Engagement | Source |
 | --- | --- | --- | --- | --- |
 | JSONB Fields in PostgreSQL & Prisma | `postgres`, `prisma`, `databasedesign` | pending |  | [src](./articles/databas-design/jsonb-fields-in-postgres-and-prisma.md) |
+
+### Iac (1)
+
+| Article | Tags | Published | Engagement | Source |
+| --- | --- | --- | --- | --- |
+| Kubernetes cheatsheet | `kubernetes`, `pods`, `cheatsheet`, `cli` | pending |  | [src](./articles/iac/kubernetes-cheatsheet.md) |
 
 ## Standalone
 
