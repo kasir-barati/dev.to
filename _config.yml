@@ -12,10 +12,10 @@ search_enabled: true
 heading_anchors: true
 color_scheme: dark
 aux_links:
-  dev.to profile:
-    - https://dev.to/kasir-barati
   GitHub:
     - https://github.com/kasir-barati/dev.to
+  My Portfolio:
+    - https://kasir-barati.github.io/
 
 defaults:
   - scope: { path: "" }
