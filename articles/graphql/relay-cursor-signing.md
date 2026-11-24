@@ -2,13 +2,15 @@
 title: Do you need to sign a Relay pagination cursor?
 description: Here I am talking about relay pagination and whether to sign a cursor or not
 published: true
-cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/relay-cursor-signing/cover.png"
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/relay-cursor-signing/cover.png?v=6f9c0e4'
 tags:
   - graphql
   - relay
   - go
   - nestjs
 series: Graphql
+id: 5110845
+date: '2026-11-24T19:15:15Z'
 ---
 
 Before starting the main topic I would like to clarify that in this article when I say:
