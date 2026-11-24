@@ -12,7 +12,7 @@ Source for the articles auto-published under [`kasir-barati/dev.to`](https://git
   <a href="https://github.com/kasir-barati/dev.to/actions/workflows/publish.yml"><img alt="publish workflow" src="https://img.shields.io/github/actions/workflow/status/kasir-barati/dev.to/publish.yml?branch=main&label=publish&style=for-the-badge&logo=github&logoColor=white&labelColor=0A0A0A&color=10B981"></a>
   <a href="https://github.com/kasir-barati/dev.to/actions/workflows/schedule.yml"><img alt="schedule workflow" src="https://img.shields.io/github/actions/workflow/status/kasir-barati/dev.to/schedule.yml?branch=main&label=schedule&style=for-the-badge&logo=githubactions&logoColor=white&labelColor=0A0A0A&color=10B981"></a>
   <a href="https://github.com/kasir-barati/dev.to/actions/workflows/validate.yml"><img alt="validate workflow" src="https://img.shields.io/github/actions/workflow/status/kasir-barati/dev.to/validate.yml?branch=main&label=validate&style=for-the-badge&logo=checkmarx&logoColor=white&labelColor=0A0A0A&color=10B981"></a>
-  <a href="https://dev.to/kasir-barati"><img alt="dev.to profile" src="https://img.shields.io/badge/dev.to-kasir-barati-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white"></a>
+  <a href="https://dev.to/kasir-barati"><img alt="dev.to profile" src="https://img.shields.io/badge/dev.to-kasir--barati-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white"></a>
 </p>
 
 <!-- stats:start -->
