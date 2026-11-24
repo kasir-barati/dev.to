@@ -1,0 +1,37 @@
+title: Kasir Barati
+description: Articles on system design, agentic programming, infrastructure, and many more.
+url: https://kasir-barati.github.io
+baseurl: /dev.to
+
+theme: just-the-docs
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+search_enabled: true
+heading_anchors: true
+color_scheme: light
+aux_links:
+  dev.to profile:
+    - https://dev.to/kasir-barati
+  GitHub:
+    - https://github.com/kasir-barati/dev.to
+
+defaults:
+  - scope: { path: "" }
+    values: { layout: default }
+
+exclude:
+  - AGENTS.md
+  - CLAUDE.md
+  - README.md
+  - PROCESS.md
+  - SELF_IMPROVEME.md
+  - plan.md
+  - Makefile
+  - scripts
+  - templates
+  - vendor
+  - Gemfile
+  - Gemfile.lock
+  - .claude

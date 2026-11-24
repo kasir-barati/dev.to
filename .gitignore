@@ -1,5 +1,12 @@
 _*
+!_config.yml
+!_plugins/
 articles/DRAFT/
 articles/JA/
 .claude/worktrees/
 .venv/
+
+_site/
+.jekyll-cache/
+.sass-cache/
+vendor/
