@@ -11,20 +11,28 @@ tags:
 series: Graphql
 ---
 
-## td;dr
+Before starting the main topic I would like to clarify that in this article when I say:
 
-**No**. The [Relay Cursor Connections spec](https://relay.dev/graphql/connections.htm) never asks for it.
+- **Encoding** (base64, MessagePack), it means change the format only. **But** anyone can reverse it, there is no secret.
+- **Signing** (here HMAC with a secret), it means letting the server to detect a cursor that was edited or forged. **But** we are not not trying to hide the content.
 
-AFAIK the spec says:
+## TL;DR
 
-- Cursor represents the position of an item inside a list of items ([ref](https://www.howtographql.com/react-relay/8-pagination)).
-- Every edge has a `cursor`, and the spec calls it an opaque string.
+**No**. The [Relay Cursor Connections spec](https://relay.dev/graphql/connections.htm) never asks for it. AFAIK, the spec says:
 
-**That is all**. Nothing says the cursor must be signed, encrypted or tied to the query that issued it. "Opaque" is a contract with the client (do not look inside), not a security property.
+- A cursor represents the position of an item inside a list ([ref](https://www.howtographql.com/react-relay/8-pagination)).
+- Every edge has a `cursor`, which the spec calls an opaque string.
+
+**That is all**. Nothing says the cursor must be encrypted or tied to the query that issued it. "Opaque" is a contract with the client (do not look inside), not a security property.
 
 ## NodeJS/NestJS -- Signed Cursor
 
-When I started building GraphQL APIs I was encoding, signing and decoding. A concrete example would be [smart-novel@1.0.0](https://github.com/Ponos-OS/smart-novel/releases/tag/v1.0.0), there a cursor would have looked like this: `eyJhIjoiTVMyWVo3Wkl5WkZSMW1fM1FkaHhubSIsImsiOlsiMWM3NjJlMTgtNzZiMS00YWU4LTg1ZjctZWRmYmUzMjAxODBmIl19.KZX-ximd3leLM_1k0SXAPxZjaysKAvHzEcMrGf3-Tjk`
+When I started building GraphQL APIs I encoded, and signed every cursor. A concrete example is [smart-novel@1.0.0](https://github.com/Ponos-OS/smart-novel/releases/tag/v1.0.0), where a cursor looks like: `eyJhIjoiTVMyWVo3Wkl5WkZSMW1fM1FkaHhubSIsImsiOlsiMWM3NjJlMTgtNzZiMS00YWU4LTg1ZjctZWRmYmUzMjAxODBmIl19.KZX-ximd3leLM_1k0SXAPxZjaysKAvHzEcMrGf3-Tjk`
+
+| Part                                                                                                   | Description                             |
+| ------------------------------------------------------------------------------------------------------ | --------------------------------------- |
+| `eyJhIjoiTVMyWVo3Wkl5WkZSMW1fM1FkaHhubSIsImsiOlsiMWM3NjJlMTgtNzZiMS00YWU4LTg1ZjctZWRmYmUzMjAxODBmIl19` | Base64URL-encoded JSON Payload          |
+| `KZX-ximd3leLM_1k0SXAPxZjaysKAvHzEcMrGf3-Tjk`                                                          | Base64URL-encoded HMAC-SHA256 Signature |
 
 ```bash
 $ node -p 'JSON.parse(Buffer.from(process.argv[1].split(".")[0], "base64url"))' 'eyJhIjoiTVMyWVo3Wkl5WkZSMW1fM1FkaHhubSIsImsiOlsiMWM3NjJlMTgtNzZiMS00YWU4LTg1ZjctZWRmYmUzMjAxODBmIl19.KZX-ximd3leLM_1k0SXAPxZjaysKAvHzEcMrGf3-Tjk'
@@ -35,44 +43,37 @@ $ node -p 'JSON.parse(Buffer.from(process.argv[1].split(".")[0], "base64url"))' 
 }
 ```
 
-The cursor has three parts, and the code is in [apps/backend/src/modules/cursor/cursor-codec.service.ts](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/cursor/cursor-codec.service.ts):
+The cursor is two [base64url](https://www.rfc-editor.org/info/rfc4648/) strings joined by a dot, and the code is in [apps/backend/src/modules/cursor/cursor-codec.service.ts](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/cursor/cursor-codec.service.ts):
 
-```
-<base64url JSON payload>.<base64url HMAC-SHA256 signature>
-```
+The payload has to key-value pairs, `k`:
 
-`k`:
+- The position of the cursor: the id of **the row** of the cursor. And the next request starts after that row.
+- In this case it is `['novelId']`.
+- It's an array, but the type is `string[]`. The array leaves room for a composite key later.
 
-- The position of the cursor.
-- The id of **the last row** on the cursor I just picked to decode its cursor. The next request starts after that row.
-- In this case it is `[novelId]`.
-- It's an array, but the type is [string], so it always holds exactly one UUID.
-- The array leaves room for a composite key later.
+`a` is the audience:
 
-`a`:
-
-- The audience of the cursor.
-- Identifies the query the cursor was issued for.
+- It identifies the query the cursor was issued for.
 - It's built by [`buildAudience` in shared/utils/cursor-audience.util.ts](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L27-L45):
-  1.  Accepts `connection`, and `query`. `connection` is the connection's name. [query holds the filters](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L155), the scope (parent id, viewer) and [any sort the client chose](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L145-L152).
+  1.  Takes `connection` (the connection's name) and `query`. `query` holds [the filters](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L155), the scope (parent id, viewer) and [any sort the client chose](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L145-L152).
   2.  [Canonicalize it](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L5): sort keys, drop `undefined`, and turn dates into ISO strings. Equal queries then serialize to the same string.
   3.  [Hash it](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L41-L44) with SHA-256, encode as base64url, and keep the first 22 characters.
 
-So `MS2YZ7ZIyZFR1m_3Qdhxnm` is a hash, not a readable value. We can't reverse it. We can only recompute it from a candidate query and compare. [`decode(cursor, audience)`](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/cursor/cursor-codec.service.ts#L44-L80) throws a `BadRequestException` if the cursor's a doesn't match the current query's audience. This stops a cursor from one list, filter, or viewer being replayed on another.
+So `MS2YZ7ZIyZFR1m_3Qdhxnm` is a hash, not a readable value. We can't reverse it, only **recompute it from a candidate query** and compare.
 
-The signature after the `.`
+[`decode(cursor, audience)`](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/cursor/cursor-codec.service.ts#L44-L80) throws a `BadRequestException` if the cursor's `a` doesn't match the current query's audience. This stops a cursor from one list, filter, or viewer being replayed on another.
 
-This is an HMAC-SHA256 of the base64url payload, keyed with [`CURSOR_SIGNING_SECRET`](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/.env.example#L100). It stops clients from forging or editing cursors. decode checks it with [`timingSafeEqual`](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/cursor/cursor-codec.service.ts#L60) before it parses the payload.
+The signature comes after the `.`. It is an HMAC-SHA256 of the base64url payload, keyed with [`CURSOR_SIGNING_SECRET`](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/.env.example#L100). It stops clients from forging or editing cursors. `decode` checks it with [`timingSafeEqual`](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/cursor/cursor-codec.service.ts#L60) before it parses the payload.
 
-Essentially the payload is encoded, not encrypted. Anyone can read `a` and `k`, as we just did, but nobody can change them without the `CURSOR_SIGNING_SECRET`.
+In short, the payload is encoded, not encrypted. Anyone can read `a` and `k`, as we just did, but nobody can change them without the `CURSOR_SIGNING_SECRET`.
 
 ## Golang/Ent -- Unsigned Cursor
 
-But later when I tried to use [Ent](https://github.com/ent/ent) framework in Golang I realized I could have dropped the signing cursor part.
+Later when I started building GraphQL APIs in [Ent](https://github.com/ent/ent) framework I realized I could drop the signing part.
 
-The cursor in Golang would look like this: `gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa`:
+A cursor issued by Ent looks like `gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa`.
 
-It's [`MessagePack`](https://msgpack.org/), base64-encoded. Ent's pagination cursor holds the row's ID and the sort value and as you can see here we used Python and bash to decode it (you can see how to do it [here in Golang](#how-you-can-decode-the-ent-cursor)):
+It's [MessagePack](https://msgpack.org), base64-encoded, with no secret and no signature. It holds the row's ID and the sort value:
 
 ```bash
 $ echo 'gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa' | base64 -d | xxd; python3 -c "import base64;print(base64.b64decode('gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa'+'=='*0).hex())"
@@ -89,26 +90,28 @@ The raw bytes are:
 
 MessagePack uses the first byte of each item to say what it is:
 
-| Byte          | Meaning                                                                        |
-| ------------- | ------------------------------------------------------------------------------ |
-| 82            | A map with 2 entries (`i`, and `v`)                                            |
-| a1            | A string of 1 byte                                                             |
-| 69            | The `i` key (identifier for cursor-based pagination)                           |
-| c4            |                                                                                |
-| 10            | the blob is 16 bytes                                                           |
-| next 16 bytes | The blob itself, a UUID                                                        |
-| a1 76         | The `v` key (sort criteria)                                                    |
-| a3            |                                                                                |
-| 5a 5a 5a      | "ZZZ" (the novel name, I was just testing, so that's why the name is so weird) |
+| Byte          | Meaning                                                         |
+| ------------- | --------------------------------------------------------------- |
+| 82            | A map with 2 entries (`i`, and `v`)                             |
+| a1            | A string of 1 byte                                              |
+| 69            | The `i` key (identifier for cursor-based pagination)            |
+| c4            | A binary blob whose length is in the next byte                  |
+| 10            | The blob is 16 bytes                                            |
+| next 16 bytes | The blob itself, a UUID                                         |
+| a1 76         | The `v` key (sort criteria)                                     |
+| a3            | A string of 3 bytes                                             |
+| 5a 5a 5a      | "ZZZ" (the novel name, I was just testing so the name is weird) |
 
-- `i` is "fd7ce09e-83e3-4dae-8c84-a8722606ae2e", a novel ID.
-- `v` is "ZZZ". It is **the value of the field** the list is ordered by, here the novel name.
+- `i` is the novel ID, `"fd7ce09e-83e3-4dae-8c84-a8722606ae2e"`.
+- `v` is `"ZZZ". It is **the value of the field** the list is ordered by, here the novel name.
 
-  The cursor stores it so the database can resume after that row/cursor. Ent orders by (value, id), and the **ID is our tie breaker**.
+  The cursor stores it so the database can resume after that row. Ent orders by (value, id), and the **ID is our tie breaker**.
 
-In Golang I am generating the cursor [`apps/backend/internal/graph/scalar/cursor.go`](https://github.com/Ponos-OS/smart-novel/blob/v2.0.0/apps/backend/internal/graph/scalar/cursor.go).
+Since nothing is signed, a client can decode, edit and re-encode this cursor. That is fine here: the worst outcome is a different starting position in a list the client can already read, and the query's filters and permissions are applied on the server regardless.
 
-## How You can Decode the Ent Cursor
+The cursor is generated in [`apps/backend/internal/graph/scalar/cursor.go`](https://github.com/Ponos-OS/smart-novel/blob/v2.0.0/apps/backend/internal/graph/scalar/cursor.go).
+
+## How to Decode the Ent Cursor
 
 ```go
 package main
