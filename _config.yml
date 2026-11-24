@@ -10,7 +10,7 @@ plugins:
 
 search_enabled: true
 heading_anchors: true
-color_scheme: light
+color_scheme: dark
 aux_links:
   dev.to profile:
     - https://dev.to/kasir-barati
