@@ -7,7 +7,7 @@ tags:
   - bedrock
   - systemdesign
   - terraform
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/designing-a-serverless-ai-digital-twin-on-aws/cover.png?v=75a19ac'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/designing-a-serverless-ai-digital-twin-on-aws/cover.png?v=75a19ac'
 series: Agentic Programming
 id: 4736778
 date: '2026-09-24T22:04:22Z'

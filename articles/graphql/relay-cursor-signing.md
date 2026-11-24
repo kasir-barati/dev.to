@@ -2,7 +2,7 @@
 title: Do you need to sign a Relay pagination cursor?
 description: Here I am talking about relay pagination and whether to sign a cursor or not
 published: true
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/relay-cursor-signing/cover.png?v=6f9c0e4'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/graphql/assets/relay-cursor-signing/cover.png?v=6f9c0e4'
 tags:
   - graphql
   - relay

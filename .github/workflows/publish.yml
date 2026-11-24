@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "articles/**/*.md"
-      - "articles/assets/**"
+      - "articles/**/assets/**"
   workflow_dispatch:
     inputs:
       scope:
@@ -82,7 +82,7 @@ jobs:
 
             # Asset-only changes don't touch the article's markdown, but the article still needs to be re-pushed so devto-cli's diff check (full file content equality) picks up the cache-busted image reference bump_asset_versions.py is about to write. See https://github.com/kasir-barati/dev.to/issues/2.
             assets_list="${RUNNER_TEMP}/articles-assets.nul"
-            git diff -z --name-only --diff-filter=d "$base" "$AFTER" -- ':(glob)articles/assets/**' > "$assets_list"
+            git diff -z --name-only --diff-filter=d "$base" "$AFTER" -- ':(glob)articles/assets/**' ':(glob)articles/*/assets/**' > "$assets_list"
             asset_files=()
             mapfile -d '' -t asset_files < "$assets_list"
             if [ "${#asset_files[@]}" -gt 0 ]; then

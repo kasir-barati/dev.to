@@ -2,7 +2,7 @@
 title: Vibe Engineering -- Responsible use of LLMs
 published: true
 description: 'From fast & loose to accountable & pro: how seasoned devs accelerate with LLMs without losing control.'
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/vibe-engineering-resposible-use-of-llms/cover.png'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/vibe-engineering-resposible-use-of-llms/cover.png'
 tags:
   - ai
   - llm
@@ -26,7 +26,7 @@ And I wholeheartedly agree with him. It's about being **highly productive**, **h
 
 You are responsible for what LLMs generate:
 
-![You are responsible for what LLMs generate](../assets/vibe-engineering-resposible-use-of-llms/claude-security-note.png)
+![You are responsible for what LLMs generate](assets/vibe-engineering-resposible-use-of-llms/claude-security-note.png)
 
 *Happy engineering.* 🚀
 

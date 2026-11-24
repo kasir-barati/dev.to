@@ -7,7 +7,7 @@ tags:
   - python
   - systemdesign
   - architecture
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/rabbitmq-consumer-as-a-separate-worker-service/cover.png?v=dc39ea7'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/rabbitmq-consumer-as-a-separate-worker-service/cover.png?v=dc39ea7'
 series: System Design
 id: 4527513
 date: '2026-08-30T09:04:59Z'

@@ -6,7 +6,7 @@ tags:
   - monorepo
   - polyrepo
   - softwarearchitecture
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/monorepo-vs-polyrepo/cover.png?v=b04df35'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/monorepo-vs-polyrepo/cover.png?v=b04df35'
 series: System Design
 id: 4618484
 date: '2026-09-10T01:12:57Z'
@@ -52,4 +52,4 @@ Boiled down, the questions that decide "same repo or separate repo" are:
 3. **Do they release and version together in practice?** Two apps deployed in lockstep benefit from atomic commits across both. Two services with independent release cadences don't need that coupling, and a shared repo can make it harder to see which one actually changed.
 4. **Does "related product" already imply "related tooling"?** It often doesn't. Two parts of the same product can legitimately be written in different languages for good reasons (ML tooling in Python, application layer in TypeScript), that's a reason to keep them separate, not a coincidence to design around.
 
-![Monorepo VS polyrepo in a nutshell](../assets/monorepo-vs-polyrepo/monorepo-vs-polyrepo-in-nutshell.png?v=f8fd4b5)
+![Monorepo VS polyrepo in a nutshell](assets/monorepo-vs-polyrepo/monorepo-vs-polyrepo-in-nutshell.png?v=f8fd4b5)

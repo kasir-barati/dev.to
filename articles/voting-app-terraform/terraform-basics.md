@@ -7,7 +7,7 @@ tags:
   - aws
   - terraform
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/terraform-basics/cover.png?v=164e88c'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/voting-app-terraform/assets/terraform-basics/cover.png?v=164e88c'
 series: Voting App Terraform
 id: 4583571
 date: '2026-09-05T17:22:43Z'

@@ -7,7 +7,7 @@ tags:
   - microservices
   - coupling
   - antipattern
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/lockstep-deployment-anti-pattern/cover.png?v=9e8341a'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/lockstep-deployment-anti-pattern/cover.png?v=9e8341a'
 series: System Design
 id: 4645353
 date: '2026-09-13T20:16:50Z'

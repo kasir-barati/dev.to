@@ -45,7 +45,7 @@ The slug becomes part of the dev.to URL (dev.to appends a random suffix on first
 
 ### Assets
 
-Images and hands-on resources go under `articles/assets/<slug>/`. The publish step runs `dev push -r ${{ github.repository }}`, which rewrites relative asset paths to `raw.githubusercontent.com` URLs before sending to dev.to. Cover images at the canonical size (1000x420) can be generated with `scripts/gen_cover_image.py`.
+Images and hands-on resources go under `assets/<slug>/` next to the article (`articles/assets/<slug>/` for a flat article, `articles/<dir>/assets/<slug>/` for a series one). The publish step runs `dev push -r ${{ github.repository }}`, which rewrites relative asset paths to `raw.githubusercontent.com` URLs before sending to dev.to. Cover images at the canonical size (1000x420) can be generated with `scripts/gen_cover_image.py`.
 
 </td>
 </tr>

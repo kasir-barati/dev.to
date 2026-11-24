@@ -7,7 +7,7 @@ tags:
   - ddd
   - integration
   - anticorruptionlayer
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/anti-corruption-layer-for-beatrice-tts/cover.png?v=27ba654'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/anti-corruption-layer-for-beatrice-tts/cover.png?v=27ba654'
 series: System Design
 id: 4650287
 date: '2026-09-14T11:55:19Z'
@@ -51,15 +51,15 @@ A DTO at a trust boundary should validate the shape it can actually enforce and 
 
 Before this change, the same three string comparisons (`update.status === 'completed'`, `=== 'failed'`) were duplicated five times across [`ChapterNarrationService.handleStatusUpdate`](https://github.com/Ponos-OS/smart-novel/blob/b16fb53cc2c267f43e8ec356e9defa46a936065e/apps/backend/src/modules/novel/services/chapter-narration.service.ts#L124-L153):
 
-![Anti-corruption layer used for terminal statues](../assets/anti-corruption-layer-for-beatrice-tts/terminal-state-acl.png?v=aebe4cf)
+![Anti-corruption layer used for terminal statues](assets/anti-corruption-layer-for-beatrice-tts/terminal-state-acl.png?v=aebe4cf)
 
 And [`shouldApplyStatusUpdate`](https://github.com/Ponos-OS/smart-novel/blob/b16fb53cc2c267f43e8ec356e9defa46a936065e/apps/backend/src/modules/novel/services/chapter-narration.service.ts#L185-L229):
 
-![Anti-corruption layer used for business logic](../assets/anti-corruption-layer-for-beatrice-tts/should-apply-status-update-acl.png?v=3e04240)
+![Anti-corruption layer used for business logic](assets/anti-corruption-layer-for-beatrice-tts/should-apply-status-update-acl.png?v=3e04240)
 
 Plus the `switch` in [`mapBeatriceStatus`](https://github.com/Ponos-OS/smart-novel/blob/b16fb53cc2c267f43e8ec356e9defa46a936065e/apps/backend/src/modules/novel/services/chapter-narration.service.ts#L235-L246).
 
-![Switch ACL](../assets/anti-corruption-layer-for-beatrice-tts/switch-acl.png?v=79c1a3f)
+![Switch ACL](assets/anti-corruption-layer-for-beatrice-tts/switch-acl.png?v=79c1a3f)
 
 If Beatrice ever renamed `completed` to `succeeded`, all five spots would silently need updating, miss one and the narration lock, the persisted audio URL, or the published subscription event would each independently disagree about whether the job was actually done. Now every one of those call sites goes through the same two predicates, so a rename is a one-line fix in `beatrice-status.util.ts`.
 

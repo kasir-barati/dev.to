@@ -7,7 +7,7 @@ tags:
   - llm
   - cicd
   - automation
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/testing-llm-powered-apps/cover.png?v=123d5d2'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/testing-llm-powered-apps/cover.png?v=123d5d2'
 series: Agentic Programming
 id: 4653896
 date: '2026-09-14T23:34:54Z'

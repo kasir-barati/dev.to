@@ -90,6 +90,9 @@ def classify(path: str, root: str = ARTICLES_DIR):
     if _is_reserved(dirname) or _is_gitignored(os.path.join(root, dirname)):
         return "reserved", dirname
 
+    if parts[1] == "assets":
+        return "reserved", dirname
+
     if len(parts) > 2:
         return "too_deep", dirname
 
@@ -123,8 +126,9 @@ def discover_paths(root: str = ARTICLES_DIR):
                 continue
 
             paths += sorted(glob.glob(os.path.join(full, "*.md")))
+            assets = os.path.join(full, "assets") + os.sep
             for nested in glob.glob(os.path.join(full, "**", "*.md"), recursive=True):
-                if os.path.dirname(nested) != full:
+                if os.path.dirname(nested) != full and not nested.startswith(assets):
                     too_deep.append(nested)
 
     return sorted(paths), sorted(too_deep)

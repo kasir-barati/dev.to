@@ -6,7 +6,7 @@ tags:
   - postgres
   - prisma
   - databasedesign
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/jsonb-fields-in-postgres-and-prisma/cover.png?v=845da4f'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/databas-design/assets/jsonb-fields-in-postgres-and-prisma/cover.png?v=845da4f'
 series: Databas Design
 id: 4740803
 date: '2026-09-25T09:18:10Z'

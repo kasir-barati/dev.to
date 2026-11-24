@@ -70,7 +70,7 @@ index-check: ## Fail if INDEX.md or README stats are stale
 diagrams: ## Re-render every D2 source to PNG
 	@shopt -s nullglob; \
 	count=0; \
-	for src in articles/assets/*/diagrams/*.d2; do \
+	for src in articles/assets/*/diagrams/*.d2 articles/*/assets/*/diagrams/*.d2; do \
 	  d2 --sketch --theme 200 --scale 3 "$$src" "$${src%.d2}.png" >/dev/null || exit 1; \
 	  count=$$((count+1)); \
 	done; \

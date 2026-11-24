@@ -7,10 +7,10 @@ tags:
   - debugging
   - claude
   - productivity
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/how-structured-output-enforces-wha-llm-returns/cover.png?v=36ef591'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/how-structured-output-enforces-wha-llm-returns/cover.png?v=36ef591"
 series: Agentic Programming
 id: 4687407
-date: '2026-09-18T17:45:33Z'
+date: "2026-09-18T17:45:33Z"
 ---
 
 One important nuance before we get down to business: **PydanticAI itself doesn't magically force the LLM to obey a Pydantic model.** Rather, PydanticAI can take your Pydantic model and use structured-output mechanisms to constrain/validate the model's response. Depending on the model/provider and configuration, this can involve provider-native structured output, tool/function calling, or other constrained-decoding approaches.
@@ -349,7 +349,7 @@ Another interesting technical details is that LLMs don't necessarily generate:
 
 As individual words/characters. They generate **tokens**. For example, a tokenizer might split text into pieces and the exact tokenization depends on the model. For example I am [tokenizing using gpt2](https://tokenizer.model.box/?model=gpt2):
 
-![tokenization example](../assets/how-structured-output-enforces-wha-llm-returns/tokenizer.png?v=82562a2)
+![tokenization example](assets/how-structured-output-enforces-wha-llm-returns/tokenizer.png?v=82562a2)
 
 So the constraint system has to reason about:
 

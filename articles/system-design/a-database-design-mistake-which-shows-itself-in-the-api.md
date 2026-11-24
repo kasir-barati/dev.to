@@ -7,7 +7,7 @@ tags:
   - postgresql
   - llm
   - tts
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/a-database-design-mistake-which-shows-itself-in-the-api/cover.png?v=8fadd89'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/a-database-design-mistake-which-shows-itself-in-the-api/cover.png?v=8fadd89'
 series: System Design
 id: 4600638
 date: '2026-09-07T22:13:09Z'

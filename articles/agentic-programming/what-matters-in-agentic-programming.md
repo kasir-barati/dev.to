@@ -6,7 +6,7 @@ tags:
   - agents
   - llm
   - softwaredevelopment
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/what-matters-in-agentic-programming/cover.png?v=aee822b'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/what-matters-in-agentic-programming/cover.png?v=aee822b'
 series: Agentic Programming
 id: 4696122
 date: '2026-09-19T20:55:08Z'

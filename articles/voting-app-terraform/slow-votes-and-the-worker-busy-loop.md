@@ -7,7 +7,7 @@ tags:
   - debugging
   - kubernetes
   - fullstack
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/slow-votes-and-the-worker-busy-loop/cover.png?v=2357a22'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/voting-app-terraform/assets/slow-votes-and-the-worker-busy-loop/cover.png?v=2357a22'
 series: Voting App Terraform
 id: 4743374
 date: '2026-09-25T14:42:08Z'

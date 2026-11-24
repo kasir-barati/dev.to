@@ -7,7 +7,7 @@ tags:
   - programming
   - productivity
   - workflow
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/coding-agent-and-workflows/cover.png?v=6b3083e'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/coding-agent-and-workflows/cover.png?v=6b3083e'
 series: Agentic Programming
 id: 4486684
 date: '2026-08-25T15:58:03Z'

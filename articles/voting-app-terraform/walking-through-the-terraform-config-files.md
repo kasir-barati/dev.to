@@ -7,7 +7,7 @@ tags:
   - aws
   - eks
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/voting-app-terraform/assets/walking-through-the-terraform-config-files/cover.png?v=c43a435'
 series: Voting App Terraform
 id: 4586866
 date: '2026-09-06T08:59:33Z'

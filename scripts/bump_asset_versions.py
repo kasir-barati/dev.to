@@ -41,23 +41,18 @@ CODE_RE = re.compile(f"(?:{FENCE_RE.pattern})|(?:{INLINE_CODE_RE.pattern})", re.
 
 def owning_article(asset_path: Path, series_paths: list[str]) -> Path | None:
     """
-    articles/assets/<slug>/... -> articles/<slug>.md or articles/<series-dir>/<slug>.md, whichever exists. Assets are keyed by slug regardless of whether the article itself lives flat or under a series directory. `series_paths` is the full flat + one-level-series article list (computed once by the caller, since a slug collision across series dirs makes this ambiguous otherwise).
+    articles/assets/<slug>/... -> articles/<slug>.md, and articles/<dir>/assets/<slug>/... -> articles/<dir>/<slug>.md. Assets always sit in an `assets/` directory beside the article that owns them.
     """
     parts = asset_path.parts
-    if len(parts) < 3 or parts[0] != "articles" or parts[1] != "assets":
+    if parts[0] != "articles":
         return None
-    slug = parts[2]
-    flat = ARTICLES_DIR / f"{slug}.md"
-    if flat.is_file():
-        return flat
-    matches = [p for p in series_paths if Path(p).name == f"{slug}.md"]
-    if len(matches) > 1:
-        print(
-            f"warning: slug {slug!r} matches multiple articles {matches}; not republishing {asset_path}",
-            file=sys.stderr,
-        )
+    if len(parts) >= 3 and parts[1] == "assets":
+        article = ARTICLES_DIR / f"{parts[2]}.md"
+    elif len(parts) >= 4 and parts[2] == "assets":
+        article = ARTICLES_DIR / parts[1] / f"{parts[3]}.md"
+    else:
         return None
-    return Path(matches[0]) if matches else None
+    return article if article.as_posix() in series_paths else None
 
 
 def version_token(asset_path: Path) -> str:

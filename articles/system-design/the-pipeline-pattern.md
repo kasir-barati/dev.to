@@ -7,7 +7,7 @@ tags:
   - systemdesign
   - concurrency
   - architecture
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/the-pipeline-pattern/cover.png?v=7bd6b49'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/the-pipeline-pattern/cover.png?v=7bd6b49'
 series: System Design
 id: 4529042
 date: '2026-08-30T13:55:51Z'

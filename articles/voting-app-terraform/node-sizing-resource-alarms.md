@@ -7,7 +7,7 @@ tags:
   - aws
   - eks
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/node-sizing-resource-alarms/cover.png?v=55212f1'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/voting-app-terraform/assets/node-sizing-resource-alarms/cover.png?v=55212f1'
 series: Voting App Terraform
 id: 4589523
 date: '2026-09-06T17:45:11Z'

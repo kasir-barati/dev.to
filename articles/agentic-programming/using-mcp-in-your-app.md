@@ -7,7 +7,7 @@ tags:
   - pydanticai
   - agents
   - programming
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/using-mcp-in-your-app/cover.png?v=495b2bb'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/agentic-programming/assets/using-mcp-in-your-app/cover.png?v=495b2bb'
 series: Agentic Programming
 id: 4694829
 date: '2026-09-19T14:59:04Z'

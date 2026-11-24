@@ -7,7 +7,7 @@ tags:
   - aws
   - eks
   - iac
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/looking-at-what-we-are-building/cover.png?v=ef9fa80'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/voting-app-terraform/assets/looking-at-what-we-are-building/cover.png?v=ef9fa80'
 series: Voting App Terraform
 id: 4584536
 date: '2026-09-05T21:25:59Z'

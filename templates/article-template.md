@@ -3,7 +3,7 @@ title: "Article Title Here"
 published: false
 description: "A short description of the post."
 tags: ["tag1", "tag2"]
-# cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/<slug>/cover.png"
+# cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/<dir>/assets/<slug>/cover.png"
 # canonical_url: ""
 # date: "2026-01-01T09:00:00Z"
 ---
@@ -31,13 +31,10 @@ Open with the personal motivation or the discovery that made this worth writing.
 ## Core Concept
 
 Explain the mechanism, driven by a diagram. Store D2 sources under
-`articles/assets/<slug>/diagrams/NN-name.d2` and reference the rendered PNG —
-assets always live at `articles/assets/<slug>/` regardless of where this
-article file lives, so the relative path depends on this file's own depth:
+`assets/<slug>/diagrams/NN-name.d2` beside this file and reference the
+rendered PNG:
 
 ![Diagram description](./assets/<slug>/diagrams/01-overview.png)
-<!-- from a series article one level deep instead, use:
-![Diagram description](../assets/<slug>/diagrams/01-overview.png) -->
 
 ## Deep Dive
 

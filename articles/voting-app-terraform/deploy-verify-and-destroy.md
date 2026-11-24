@@ -7,7 +7,7 @@ tags:
   - aws
   - eks
   - kubernetes
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/deploy-verify-and-destroy/cover.png?v=9c7e349'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/voting-app-terraform/assets/deploy-verify-and-destroy/cover.png?v=9c7e349'
 series: Voting App Terraform
 id: 4587418
 date: '2026-09-06T11:08:24Z'

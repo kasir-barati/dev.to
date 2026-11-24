@@ -263,7 +263,7 @@ def check_body(path, body, offset, raw_body, findings):
     # Only this repo's own assets are constrained; articles legitimately link to
     # raw files in other repos (the author's projects, upstream OSS).
     for match in re.finditer(
-        r"raw\.githubusercontent\.com/([\w.-]+/[\w.-]+)/\S*?articles/assets/", body
+        r"raw\.githubusercontent\.com/([\w.-]+/[\w.-]+)/\S*?articles/(?:[^/\s]+/)?assets/", body
     ):
         if match.group(1) != REPO:
             line = offset + body[: match.start()].count("\n") + 1

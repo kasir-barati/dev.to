@@ -7,7 +7,7 @@ tags:
   - opentelemetry
   - cloudinfrastructure
   - devops
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/observability-and-telemetry-retention-policy/cover.png?v=29599e9'
+cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/system-design/assets/observability-and-telemetry-retention-policy/cover.png?v=29599e9'
 series: System Design
 id: 4618260
 date: '2026-09-10T00:11:16Z'
