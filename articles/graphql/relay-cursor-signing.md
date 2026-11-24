@@ -2,7 +2,7 @@
 title: Do you need to sign a Relay pagination cursor?
 description: Here I am talking about relay pagination and whether to sign a cursor or not
 published: true
-cover_image: 'https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/relay-cursor-signing/cover.png?v=6f9c0e4'
+cover_image: "https://raw.githubusercontent.com/kasir-barati/dev.to/refs/heads/main/articles/assets/relay-cursor-signing/cover.png?v=6f9c0e4"
 tags:
   - graphql
   - relay
@@ -10,7 +10,7 @@ tags:
   - nestjs
 series: Graphql
 id: 5110845
-date: '2026-11-24T19:15:15Z'
+date: "2026-11-24T19:15:15Z"
 ---
 
 Before starting the main topic I would like to clarify that in this article when I say:
@@ -57,9 +57,9 @@ The payload has to key-value pairs, `k`:
 
 - It identifies the query the cursor was issued for.
 - It's built by [`buildAudience` in shared/utils/cursor-audience.util.ts](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L27-L45):
-  1.  Takes `connection` (the connection's name) and `query`. `query` holds [the filters](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L155), the scope (parent id, viewer) and [any sort the client chose](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L145-L152).
-  2.  [Canonicalize it](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L5): sort keys, drop `undefined`, and turn dates into ISO strings. Equal queries then serialize to the same string.
-  3.  [Hash it](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L41-L44) with SHA-256, encode as base64url, and keep the first 22 characters.
+  1. Takes `connection` (the connection's name) and `query`. `query` holds [the filters](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L155), the scope (parent id, viewer) and [any sort the client chose](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/modules/novel/services/novel.service.ts#L145-L152).
+  2. [Canonicalize it](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L5): sort keys, drop `undefined`, and turn dates into ISO strings. Equal queries then serialize to the same string.
+  3. [Hash it](https://github.com/Ponos-OS/smart-novel/blob/v1.0.0/apps/backend/src/shared/utils/cursor-audience.util.ts#L41-L44) with SHA-256, encode as base64url, and keep the first 22 characters.
 
 So `MS2YZ7ZIyZFR1m_3Qdhxnm` is a hash, not a readable value. We can't reverse it, only **recompute it from a candidate query** and compare.
 
@@ -86,7 +86,7 @@ $ echo 'gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa' | base64 -d | xxd; python3 -c "imp
 
 The raw bytes are:
 
-```
+```text
 82 a1 69 c4 10 fd7ce09e83e34dae8c84a8722606ae2e a1 76 a3 5a5a5a
 ```
 
@@ -119,19 +119,19 @@ The cursor is generated in [`apps/backend/internal/graph/scalar/cursor.go`](http
 package main
 
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/google/uuid"
+  "github.com/google/uuid"
 
-	"entgo.io/contrib/entgql"
+  "entgo.io/contrib/entgql"
 )
 
 func main() {
-	var decodedCursor entgql.Cursor[uuid.UUID]
-	if err := decodedCursor.UnmarshalGQL("gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa"); err != nil {
-		panic(err)
-	}
-	fmt.Printf("%+v\n", decodedCursor)
-	// {ID:fd7ce09e-83e3-4dae-8c84-a8722606ae2e Value:ZZZ}
+  var decodedCursor entgql.Cursor[uuid.UUID]
+  if err := decodedCursor.UnmarshalGQL("gqFpxBD9fOCeg+NNroyEqHImBq4uoXajWlpa"); err != nil {
+    panic(err)
+  }
+  fmt.Printf("%+v\n", decodedCursor)
+  // {ID:fd7ce09e-83e3-4dae-8c84-a8722606ae2e Value:ZZZ}
 }
 ```

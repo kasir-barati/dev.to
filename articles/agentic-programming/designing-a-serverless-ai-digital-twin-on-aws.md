@@ -100,6 +100,7 @@ Some rules of thumb:
 - **Synchronous HTTP APIs** with bursty traffic are the sweet spot for [FaaS](https://www.ibm.com/think/topics/faas). Choose the monolith to start and split only when there is a concrete reason (different permissions, a hot endpoint needing more memory).
 - **Long-running, streaming or stateful** work tends to fit containers better. Functions have hard timeouts, and API Gateway has its own, lower, integration limit.
 - **Glue between AWS managed services** (a file lands in a bucket, something has to happen) is the most common and most natural FaaS use. A concrete example is [aws-samples/lambda-refarch-fileprocessing](https://github.com/aws-samples/lambda-refarch-fileprocessing), it demonstrates this flow:
+
   ```text
   S3 object upload
     → S3 event notification
@@ -108,6 +109,7 @@ Some rules of thumb:
     → Lambda functions
     → S3 / DynamoDB
   ```
+
 - **LLM-backed endpoints** are slow (seconds), so the function spends most of its time waiting on I/O. Timeouts must be sized for the model, and the gateway timeout is often the real ceiling. For token streaming you would look at response streaming or a container-based service instead.
 
 ## Making a FaaS Reproducible & Light
@@ -131,12 +133,14 @@ A function that is hard to rebuild or heavy to ship becomes painful to manage. T
 - **Use layers or a container image only when they earn it.** Layers help when many functions share dependencies. Containers help when the dependency set is large or native. For a small function a plain zip is the simplest and fastest to start.
 - **Do heavy initialization once.** E.g. I load the prompt file and create the SDK clients at module import time, so warm invocations reuse them.
 - **Right-size memory.** In Lambda, memory also sets CPU. More memory can make a function cheaper overall, because it finishes sooner. Measure instead of guessing.
+
   ```hcl
   resource "aws_lambda_function" "create_order" {
     memory_size = 1024
     # ...
   }
   ```
+
 - **A FaaS function should be glue and business logic, not infrastructure.** When the function needs a capability that AWS already sells as a managed service, call that service over the network instead of pulling that capability into your deployment artifact and running it yourself.
 - **Cap the blast radius.** Set timeouts, log retention and throttling deliberately, especially when using something like a LLM which is pay-per-token.
 
