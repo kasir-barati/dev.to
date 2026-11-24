@@ -67,6 +67,10 @@ A repo secret `DEVTO_API_KEY` is required; generate it from your dev.to account 
 </tr>
 </table>
 
+## License
+
+Articles and their assets are licensed under [CC BY 4.0](./LICENSE-CONTENT). Code (`scripts/`, workflows, `Makefile`) is licensed under [MIT](./LICENSE). Third-party material such as quoted text or borrowed images keeps its own license.
+
 ## Checks
 
 `validate.yml` gates every push and pull request that touches an article. It runs three checks against the changed files only, so the pre-linter backlog in older articles never blocks new work:
